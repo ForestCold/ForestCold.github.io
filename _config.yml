@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: ForestCold
-subtitle:
-description:
+title: Magic Yummy's home
+subtitle: 玛吉雅米的窝
+description: Looking at a crowded street, listening to my own heart beat.
 author: Hanfei Lin
 language: zh-Hans
 timezone:
@@ -72,7 +72,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
