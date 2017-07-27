@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://hanfeilin.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -54,7 +54,7 @@ index_generator:
 
 # Category & Tag
 default_category: uncategorized
-category_map:
+category_map: 
 tag_map:
 
 # Date / Time format
@@ -73,6 +73,17 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: next
+
+algolia:
+  applicationID: 'YZ616ZC03L'
+  apiKey: 'bc5156a5e812ba6f39ca00a3ecdfd9ee'
+  adminApiKey: 'f642d3feb4ba935b878443c255b9fdc4'
+  indexName: 'search'
+  chunkSize: 5000
+
+# 文章末尾添加“本文结束”标记
+passage_end_tag:
+  enabled: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
