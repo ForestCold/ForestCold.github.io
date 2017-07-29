@@ -4,7 +4,7 @@
 
 # Site
 title: Magic Yummy's home
-subtitle: 玛吉雅米的窝
+subtitle: 玛吉雅米の窝  ｡◕‿◕｡
 description: Looking at a crowded street, listening to my own heart beat.
 author: Hanfei Lin
 language: zh-Hans
@@ -54,7 +54,7 @@ index_generator:
 
 # Category & Tag
 default_category: uncategorized
-category_map: 
+category_map:
 tag_map:
 
 # Date / Time format
