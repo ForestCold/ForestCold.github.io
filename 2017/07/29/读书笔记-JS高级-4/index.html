@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Bitstream Vera Sans:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="函数,数据类型,引用类型,对象," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Magic Yummy's home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="复杂类型    引用类型    对象Object    函数Function    对应「JavaScript高级程序设计」中部分第四章和部分第五章">
+<meta name="keywords" content="函数,数据类型,引用类型,对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="引用类型中的对象和函数">
+<meta property="og:url" content="http://hanfeilin.com/2017/07/29/读书笔记-JS高级-4/index.html">
+<meta property="og:site_name" content="Magic Yummy&#39;s home">
+<meta property="og:description" content="复杂类型    引用类型    对象Object    函数Function    对应「JavaScript高级程序设计」中部分第四章和部分第五章">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/ForestCold/image/master/du-3-2.jpg">
+<meta property="og:updated_time" content="2017-08-01T12:27:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="引用类型中的对象和函数">
+<meta name="twitter:description" content="复杂类型    引用类型    对象Object    函数Function    对应「JavaScript高级程序设计」中部分第四章和部分第五章">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ForestCold/image/master/du-3-2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'YZ616ZC03L',
+      apiKey: 'bc5156a5e812ba6f39ca00a3ecdfd9ee',
+      indexName: 'search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入查找内容","hits_empty":"怎么办呢，找不到: ${query} ...","hits_stats":"在 ${time} ms 找到了 ${hits}"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hanfeilin.com/2017/07/29/读书笔记-JS高级-4/"/>
+
+
+
+
+
+
+
+
+
+  <title>引用类型中的对象和函数 | Magic Yummy's home</title>
+  <style>
+      .forkme{
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+          .forkme{
+              display: inline;
+          }
+      }
+      </style>
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+      <div class="forkme">
+          <a href="https://github.com/ForestCold"><img style="width: 10% ;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Magic Yummy's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">玛吉雅米の窝  ｡◕‿◕｡</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            我的简历
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar-o"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            留言板
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photo">
+          <a href="/photo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://hanfeilin.com/2017/07/29/读书笔记-JS高级-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hanfei Lin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Magic Yummy's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">引用类型中的对象和函数</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-29T14:06:59-05:00">
+                2017-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/JavaScript高级程序设计/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript高级程序设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/07/29/读书笔记-JS高级-4/" class="leancloud_visitors" data-flag-title="引用类型中的对象和函数">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>复杂类型</code>    <code>引用类型</code>    <code>对象Object</code>    <code>函数Function</code>    <code>对应「JavaScript高级程序设计」中部分第四章和部分第五章</code></p>
+<a id="more"></a>
+<hr>
+<p>上一篇读书笔记谈到了基本数据类型，本篇笔记接着上一篇的思路，重点介绍最常用的两个个复杂数据类型，即对象Object和函数Function，对应本书中第四章的变量部分以及第五章的对象和函数部分。</p>
+<h1 id="复杂数据类型"><a href="#复杂数据类型" class="headerlink" title="复杂数据类型"></a>复杂数据类型</h1><p>复杂数据类型又称为引用类型，引用类型在内存中存储的是对象地址，请看以下代码：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = &#123;name: <span class="string">'a'</span>&#125;</div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">b</span> = a</div></pre></td></tr></table></figure></p>
+<p>a和b的存储方式如下图所示：<br><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-3-2.jpg" alt=""></p>
+<p>其中，引用类型的地址存储在大小固定的栈内存中，引用类型的内容存储在大小可变的堆类型中。因此，引用类型的值是按照引用访问的。要特别注意的是，很多语言中String是通过引用进行访问的，而JavaScript中String被归类为了基础数据类型。<br>除了访问方式的不同之外，引用类型可以随时扩展属性（不仅仅是对象，就连数组或者函数这样的引用类型也可以），而基础类型则不行。</p>
+<p>更多关于类型存储的知识比较请参照<a href="https://zhuanlan.zhihu.com/p/22400319" target="_blank" rel="external">方应杭的知乎文章</a>。</p>
+<blockquote>
+<p><strong>对象的定义：</strong> 对象是某个特定的引用类型的实例。引用类型和类的概念很像，但二者并不一样，不要混淆。</p>
+</blockquote>
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a><strong>Object</strong></h2><p>  对象类型是最基本的引用类型，也是最好理解的引用类型，其它所有引用类型都从对象中继承了基本行为。因此我们从对象类型开始说起。</p>
+<h3 id="定义对象"><a href="#定义对象" class="headerlink" title="定义对象"></a><strong>定义对象</strong></h3><p>  定义对象有两种方式，第一种方式是通过构造函数来定义：<br>  <figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="built_in">Object</span>();</div><div class="line">person.name = <span class="string">"Magic Yummy"</span>;</div></pre></td></tr></table></figure></p>
+<p>  另一种方式是通过<code>对象字面量</code>来表示：<br>  <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var person</span> = &#123;</div><div class="line">  name : <span class="string">"Magic Yummy"</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>  这两种方法定义出的对象person是等价的。实际上，第一种方法还拥有其语法糖（第三种方法）：<br>  <figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var <span class="attr">person</span> = &#123;&#125;;</div><div class="line">person.<span class="attr">name</span> = <span class="string">"Magic Yummy"</span>；</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>无论是从易读性还是性能方面而言，实际开发中都推荐采用第二种或第三种定义方法。来源于慕课网相关课程。</p>
+</blockquote>
+<p>  对于需要传入大量参数的函数，对象字面量可以用来封装这些参数。</p>
+<h3 id="访问对象"><a href="#访问对象" class="headerlink" title="访问对象"></a><strong>访问对象</strong></h3><p>  访问对象时，可以通过点表示法或方括号两种方式，如：<br>  <figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">console.<span class="built_in">log</span>(person[<span class="string">"name"</span>])   <span class="comment">// "Magic Yummy"</span></div><div class="line">console.<span class="built_in">log</span>(person.<span class="built_in">name</span>)      <span class="comment">// "Magic Yummy"</span></div></pre></td></tr></table></figure></p>
+<p>  使用方括号表示法的优点是可以通过变量来访问属性，即在方括号中书写字符串变量。另外，如果属性名中有空格，或者属性名是保留字，也可以使用方括号的写法。不过，点表示法更符合现在程序员的编程习惯，因此应该尽量使用点表示法。</p>
+<h2 id="Function"><a href="#Function" class="headerlink" title="Function"></a><strong>Function</strong></h2><p>  JavaScript中的函数与C++或JAVA中的函数有不小的区别，包含了很多巧妙的设计细节。函数部分跟包含一大堆属性方法的数组部分相比，读起来心旷神怡。</p>
+<p>  首先需要牢记的概念是，函数是一个对象，函数名是指向这个对象的指针，和这个对象本身不存在绑定关系。因此，同一个函数可以包含多个函数名，修改某个函数名使它指向新的函数对象，不会对原本被指向的那个函数对象产生任何影响。</p>
+<h3 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a><strong>定义函数</strong></h3><p>  函数可以通过<code>函数声明</code>或<code>函数表达式</code>来定义（还可以用Function构造函数来定义，不过不推荐，这里就不列出了）：<br>  <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 函数声明 */</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span> <span class="params">(num1, num2)</span></span>&#123;</div><div class="line">  <span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div><div class="line"><span class="comment">/*函数表达式*/</span></div><div class="line"><span class="keyword">var</span> sum = <span class="function"><span class="keyword">function</span><span class="params">(num1, num2)</span></span>&#123;</div><div class="line">  <span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这两种定义方式的结果没有区别。但需要注意的一点是，JavaScript的解析器在执行环境中加载数据时，会先读取函数声明，然后再执行其它任何代码。而函数表达式则没有这个待遇，它需要等到解析器执行到它所在的行，才会被解释执行。因此，如果在用函数表达式定义的函数之前调用它，会产生意外标识符的错误，而函数声明没有这个问题。</p>
+</blockquote>
+<h3 id="作为值的函数"><a href="#作为值的函数" class="headerlink" title="作为值的函数"></a><strong>作为值的函数</strong></h3><p>  一个函数可以作为其它任意函数的参数，其中一个最常用的例子就是为数组的 <em>sort()</em> 方法定义比较函数，使之根据不同的属性进行排序。可以定义如下比较函数：<br>  <figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> createComparisonFunction(prototypeName) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="keyword">object</span><span class="number">1</span>, <span class="keyword">object</span><span class="number">2</span>)&#123;</div><div class="line">    var <span class="keyword">value</span><span class="number">1</span> = <span class="keyword">object</span><span class="number">1</span>[prototypeName];</div><div class="line">    var <span class="keyword">value</span><span class="number">2</span> = <span class="keyword">object</span><span class="number">2</span>[prototypeName];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &lt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &gt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">      <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    &#125;<span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  将这个函数作为 <em>sort()</em> 排序函数的输入，并且将想要排序的属性作为这个函数的输入，就可以按照某个属性对数组进行排序。</p>
+<h3 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a><strong>函数的参数</strong></h3><p>  JavaScript的函数不要求提供特定数量和类型的参数，而函数内部维护了一个叫arguments的参数数组，用来存储传入该函数的所有参数。值得注意的是，arguments的值和对应的参数存储的值不共享一个内存空间，但它们相互绑定。如以下代码：<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doAdd</span>(<span class="params">num1, num2</span>) </span>&#123;</div><div class="line">  <span class="built_in">arguments</span>[<span class="number">1</span>] = <span class="number">10</span>;</div><div class="line">  alert(<span class="built_in">arguments</span>[<span class="number">0</span>] + num2);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  在这个函数中，如果调用时输入了两个以上的参数，那么第二个参数会被设置为10，之后的所有num2也都是10而不是起始传进来的num2值。但是如果只有一个参数，那么第二个参数的值仍然是undefined，这是因为arguments不能对超出自身长度的部分进行赋值，而它的长度又是由真正的传入的参数个数决定的。<br>  另外一点需要注意的是，JavaScript函数没有<code>重载</code>。</p>
+<blockquote>
+<p>重载指的是相同的函数名拥有不同的参数类型，根据不同参数类型函数做不同的事。由于JavaScript的函数没有对参数类型进行硬性规定，因此也就不存在重载的说法。</p>
+</blockquote>
+<h3 id="callee和caller"><a href="#callee和caller" class="headerlink" title="callee和caller"></a><strong>callee和caller</strong></h3><p>  callee和caller是函数的两个内部属性。callee是arguments的属性，指的是arguments对象所在的函数。caller则是函数自身的属性，指的是调用这个函数的函数。这么命名是为了将它们进行区分。由于函数名和函数对象不是绑定关系， 因此当我们需要在函数内进行递归的时候，使用callee属性可以实现函数名与函数内容的低耦合：<br>  <figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function <span class="built_in">factorial</span>(<span class="built_in">num</span>) &#123;</div><div class="line">  <span class="keyword">if</span> (<span class="built_in">num</span> &lt;= <span class="number">1</span>)&#123;</div><div class="line">    <span class="built_in">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">return</span> <span class="built_in">num</span> * arguments.callee(<span class="built_in">num</span> - <span class="number">1</span>); //<span class="built_in">return</span> <span class="built_in">num</span> * <span class="built_in">factorial</span>(<span class="built_in">num</span> - <span class="number">1</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  例如在以上阶乘函数中，如果按照常规的写法，函数名factorial会出现在函数内容中，如果我们用另一个函数名指向这个函数对象，就得修改相应的函数内容。但是使用arguments.callee属性就不存在这个问题。而caller也是为了实现更松散的耦合，如：<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  inner();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="built_in">arguments</span>.callee.caller); <span class="comment">//alert(inner.caller);</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">outer();</div></pre></td></tr></table></figure></p>
+<p>  这段代码会在警告框中打印出outer()函数的源码。</p>
+<h3 id="this对象"><a href="#this对象" class="headerlink" title="this对象"></a><strong>this对象</strong></h3><p>  函数的this对象引用的是函数执行的环境对象，也就是调用这个函数的对象。如果这个函数是被直接执行的（相当于在全局作用域中执行），this对象引用的就是window。<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.color = <span class="string">"red"</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;<span class="attr">color</span>: <span class="string">"blue"</span>&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayColor</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>.color);</div><div class="line">&#125;</div><div class="line"></div><div class="line">sayColor();            <span class="comment">//没人调用它，this指向window，打印出的值为red</span></div><div class="line">o.sayColor = sayColor;</div><div class="line">o.sayColor();          <span class="comment">//对象o调用它，this指向o，打印出的值为blue</span></div></pre></td></tr></table></figure></p>
+<h3 id="apply-call-和bind-方法"><a href="#apply-call-和bind-方法" class="headerlink" title="apply(), call()和bind()方法"></a><strong>apply(), call()和bind()方法</strong></h3><p>  <em>apply()</em> 方法和 <em>call()</em> 方法都能够执行函数，它们的第一个参数都为函数执行的作用域。<em>apply()</em> 函数的第二个参数为参数数组，而 <em>call()</em> 函数需要把所有参数拆开放入第二个以及之后的参数中。这两个方法的用处在于可以在不同的作用域中运行同样的函数，这一点在实际编程中非常有用。<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.color = <span class="string">"red"</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;<span class="attr">color</span> : <span class="string">"blue"</span>&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayColor</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>.color);</div><div class="line">&#125;</div><div class="line"></div><div class="line">sayColor();            <span class="comment">//red</span></div><div class="line"></div><div class="line">sayColor.call(<span class="keyword">this</span>);   <span class="comment">//red</span></div><div class="line">sayColor.call(<span class="built_in">window</span>); <span class="comment">//red</span></div><div class="line">sayColor.call(o);      <span class="comment">//blue</span></div></pre></td></tr></table></figure></p>
+<p>  <em>bind()</em> 方法创建一个函数实例，它的参数作为函数作用域绑定到这个实例上。因此就算在全局变量中调用这个函数实例，返回结果仍然基于被绑定的作用域。<br>  <figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var objectSayColor = sayColor.bind(o)<span class="comment">;</span></div><div class="line">objectSayColor()<span class="comment">;      //blue</span></div></pre></td></tr></table></figure></p>
+<p>  这种方法的好处将会在很后面的高级技巧部分进行更为详细的讨论。<br>  由于引用类型数组Array的内容实在太多，篇幅关系放到下一篇读书笔记进行整理。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div style= "margin-bottom: 10px">如果您喜欢我，就帮我的主人买包旺旺仙贝吧O(∩_∩)O！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>买买买</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/weichat.jpg" alt="Hanfei Lin WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="Hanfei Lin Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i>  读到这里的都是真爱 ❤-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/函数/" rel="tag"># 函数</a>
+          
+            <a href="/tags/数据类型/" rel="tag"># 数据类型</a>
+          
+            <a href="/tags/引用类型/" rel="tag"># 引用类型</a>
+          
+            <a href="/tags/对象/" rel="tag"># 对象</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/读书笔记-JS高级-3/" rel="next" title="数据类型分类和基本类型">
+                <i class="fa fa-chevron-left"></i> 数据类型分类和基本类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/29/读书笔记-JS高级-5/" rel="prev" title="引用类型中的数组">
+                引用类型中的数组 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Hanfei Lin" />
+          <p class="site-author-name" itemprop="name">Hanfei Lin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ForestCold" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://linkedin.com/in/hanfei-lin" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin-square"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/3232698014?topnav=1&wvr=6&topsug=1&is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#复杂数据类型"><span class="nav-number">1.</span> <span class="nav-text">复杂数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.1.</span> <span class="nav-text">Object</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义对象"><span class="nav-number">1.1.1.</span> <span class="nav-text">定义对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问对象"><span class="nav-number">1.1.2.</span> <span class="nav-text">访问对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function"><span class="nav-number">1.2.</span> <span class="nav-text">Function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义函数"><span class="nav-number">1.2.1.</span> <span class="nav-text">定义函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为值的函数"><span class="nav-number">1.2.2.</span> <span class="nav-text">作为值的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数的参数"><span class="nav-number">1.2.3.</span> <span class="nav-text">函数的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#callee和caller"><span class="nav-number">1.2.4.</span> <span class="nav-text">callee和caller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this对象"><span class="nav-number">1.2.5.</span> <span class="nav-text">this对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apply-call-和bind-方法"><span class="nav-number">1.2.6.</span> <span class="nav-text">apply(), call()和bind()方法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hanfei Lin</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2139993"></script>
+      <!-- UY END -->
+
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("PXcHUPmaGCHHAduS0ujzN7Pw-gzGzoHsz", "rkGKgaFFkY38Jw0pWlIGR9hv");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.1"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.1"></script>
+
+
+
+  <!--  -->
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

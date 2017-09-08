@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Bitstream Vera Sans:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据类型,引用类型,数组," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Magic Yummy's home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="复杂类型    引用类型    数组Array    对应「JavaScript高级程序设计」中部分第五章">
+<meta name="keywords" content="数据类型,引用类型,数组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="引用类型中的数组">
+<meta property="og:url" content="http://hanfeilin.com/2017/07/29/读书笔记-JS高级-5/index.html">
+<meta property="og:site_name" content="Magic Yummy&#39;s home">
+<meta property="og:description" content="复杂类型    引用类型    数组Array    对应「JavaScript高级程序设计」中部分第五章">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-01T12:27:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="引用类型中的数组">
+<meta name="twitter:description" content="复杂类型    引用类型    数组Array    对应「JavaScript高级程序设计」中部分第五章">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'YZ616ZC03L',
+      apiKey: 'bc5156a5e812ba6f39ca00a3ecdfd9ee',
+      indexName: 'search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入查找内容","hits_empty":"怎么办呢，找不到: ${query} ...","hits_stats":"在 ${time} ms 找到了 ${hits}"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hanfeilin.com/2017/07/29/读书笔记-JS高级-5/"/>
+
+
+
+
+
+
+
+
+
+  <title>引用类型中的数组 | Magic Yummy's home</title>
+  <style>
+      .forkme{
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+          .forkme{
+              display: inline;
+          }
+      }
+      </style>
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+      <div class="forkme">
+          <a href="https://github.com/ForestCold"><img style="width: 10% ;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Magic Yummy's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">玛吉雅米の窝  ｡◕‿◕｡</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            我的简历
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar-o"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            留言板
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photo">
+          <a href="/photo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://hanfeilin.com/2017/07/29/读书笔记-JS高级-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hanfei Lin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Magic Yummy's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">引用类型中的数组</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-29T14:07:00-05:00">
+                2017-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/JavaScript高级程序设计/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript高级程序设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/07/29/读书笔记-JS高级-5/" class="leancloud_visitors" data-flag-title="引用类型中的数组">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>复杂类型</code>    <code>引用类型</code>    <code>数组Array</code>    <code>对应「JavaScript高级程序设计」中部分第五章</code></p>
+<a id="more"></a>
+<hr>
+<p>还记得上一篇读书笔记整理的是关于对象Object和函数Array的相关知识吗？ 本篇笔记接着介绍另一个常用的引用类型————数组Array。数组类型包含非常多的属性和方法，因此单独开辟了一篇笔记来进行讲解。</p>
+<h1 id="Array"><a href="#Array" class="headerlink" title="Array"></a><strong>Array</strong></h1><p>  ECMAScript中数组的每一项都可以保存任何类型的数据，并且大小可以动态调整。</p>
+<h2 id="定义数组"><a href="#定义数组" class="headerlink" title="定义数组"></a><strong>定义数组</strong></h2><p>  数组的创建方法和Object非常类似，第一种是通过构造函数来创建：<br>  <figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = <span class="keyword">new</span> Array();</div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = <span class="keyword">new</span> Array(<span class="number">3</span>);</div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = <span class="keyword">new</span> Array(<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>);</div><div class="line"><span class="comment">//new 操作符也可以被省略</span></div></pre></td></tr></table></figure></p>
+<p>  以上代码都很简单，这里不赘述。另一种方法是通过字面量来构建：<br>  <figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = [<span class="number">1</span>, <span class="number">2</span>, ]; <span class="comment">//IE8以下版本会生成一个长度为3的数组，且第三个元素为undefined。其它浏览器生成只包含元素1和2的长度为2的数组。</span></div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = [, , ,]; <span class="comment">//IE8以下版本会生成一个长度为4的数组，其它浏览器生成长度为3的数组。</span></div></pre></td></tr></table></figure></p>
+<h2 id="索引数组"><a href="#索引数组" class="headerlink" title="索引数组"></a><strong>索引数组</strong></h2><p>  JavaScript中的数组不会向上越界，如果索引中的值超过了数组的长度，则数组自动更新长度为索引值+1。如以下代码所示：<br>  <figure class="highlight rsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>, <span class="number">2</span>];</div><div class="line">console.<span class="built_in">log</span>(arr.<span class="built_in">length</span>); <span class="comment">//2</span></div><div class="line">arr[<span class="number">5</span>] = <span class="string">'9'</span>;</div><div class="line">console.<span class="built_in">log</span>(arr.<span class="built_in">length</span>); <span class="comment">//6，其中第3到第5项的值为undefined</span></div></pre></td></tr></table></figure></p>
+<p>  数组的length属性不是只读的，因此可以通过改变length的值增加或移除数组末尾的项。如：<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>, <span class="number">2</span>];</div><div class="line">arr.length = <span class="number">1</span>;</div><div class="line">console.log(arr[<span class="number">1</span>]); <span class="comment">//undefined</span></div></pre></td></tr></table></figure></p>
+<h2 id="检测数组"><a href="#检测数组" class="headerlink" title="检测数组"></a><strong>检测数组</strong></h2><p>  使用instanceof操作符能够方便地检测某个对象是不是数组：<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(value <span class="keyword">instanceof</span> <span class="built_in">Array</span>)</div><div class="line">   ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  但是如果网页中包含多个框架，拥有多个Array构造函数，instanceof的使用会引起混乱。因此我们可以使用新增的 <em>Array.isArray()</em> 方法：<br>  <figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value))&#123;</div><div class="line">  <span class="params">...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="转换数组"><a href="#转换数组" class="headerlink" title="转换数组"></a><strong>转换数组</strong></h2><p>  每个对象都有 <em>.toLocaleString()</em>（返回对象的字符串表示，该字符串与执行环境的地区相对应）、<em>.toString()</em>(返回对象的字符串表示)和 <em>.valueOf()</em> (返回对象的字符串、数字或布尔值表示，通常与 <em>toString()</em> 返回的值相同)三个方法。数组的每一项会被用逗号隔开，组成一个字符串。</p>
+<blockquote>
+<p><em>alert()</em> 函数会在后台调用 <em>toString()</em> 方法，所以打印出的是数组每一项用逗号隔开的值，而不是数组的地址。</p>
+</blockquote>
+<p>  对于数组而言，需要注意的是 <em>toLocaleString()</em> 方法调用的是数组每一项的toLocaleString方法，而 <em>toString()</em> 方法调用的则是数组每一项的toString方法。<br>  <em>.join()</em> 方法可以更改数组项之间的分割方法（例如用”|”代替”,”进行分割）。</p>
+<blockquote>
+<p>null项和undefined项在以上方法的返回结果中以空字符串表示。</p>
+</blockquote>
+<h2 id="栈方法"><a href="#栈方法" class="headerlink" title="栈方法"></a><strong>栈方法</strong></h2><p>  数组提供了 <em>push()</em> 和 <em>pop()</em> 方法来模拟栈的行为。别问我栈是什么→_→。其中，<em>.push()</em> 方法可以有很多参数，一次放在数组末尾，其返回值为修改后的数组长度。</p>
+<h2 id="队列方法"><a href="#队列方法" class="headerlink" title="队列方法"></a><strong>队列方法</strong></h2><p>  队列沿用了栈的 <em>push()</em> 方法，向数组末尾添加元素。<em>.shift()</em> 方法可以移除数组中的第一个项并返回，同时数组长度减一。另外，数组还包含一个 <em>unshift()</em> 方法，和 <em>shift()</em> 方法相反，它向队列前端添加任意元素并返回修改后的数组长度。<br>  因此，使用 <em>push()</em>+<em>shift()</em> 的组合或 <em>pop()</em>+<em>unshift()</em> 的组合可以从头尾两端模拟队列。</p>
+<h2 id="重排序方法"><a href="#重排序方法" class="headerlink" title="重排序方法"></a><strong>重排序方法</strong></h2><p>  数组中的 <em>.reverse()</em> 会反转数组，<em>.sort()</em> 方法按照升序对数组进行排序。需要特别注意的是，<em>sort()</em> 方法调用的是数组中每一项的 <em>toString()</em> 方法，因此实质上是对字符串类型的排序。<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>];</div><div class="line">arr.sort();</div><div class="line">console.log(arr);<span class="comment">//[0, 1, 10, 15, 5];</span></div></pre></td></tr></table></figure></p>
+<p>  这个例子中，为什么调用 <em>sort()</em> 方法之后顺序反而不对了呢？因为对于字符串”10”和字符串”5”而言，首先比较的是第一位的ASCII码，因为”1”是小于”5”的，所以”10”被排在了”5”的前面。因此，我们应该通过向 <em>sort()</em> 加入参数来定义它的排序方式。<em>sort()</em> 参数是一个比较函数，可以如下定义：<br>  <figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 升序比较函数 */</span></div><div class="line">Function compare(<span class="keyword">value</span><span class="number">1</span>, <span class="keyword">value</span><span class="number">2</span>) &#123;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &lt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &gt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  对于数值类型或者 <em>valueOf()</em> 的返回值为数值类型的函数，比较函数的写法更为方便：<br>  <figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Function</span> <span class="title">compare</span> (value1, value2)&#123;</div><div class="line">  <span class="keyword">return</span> <span class="type">value1</span> - value2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a><strong>操作方法</strong></h2><p>  <em>.concat()</em> 方法，参数为值或数组（也可以是值和数组混合），返回当前数组的副本，并在该副本后面连接上参数中的值或数组。<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line">var b = a.concat(<span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]);</div><div class="line">console.log(b); <span class="comment">// [1, 2, 3, 4, 5, 6]</span></div></pre></td></tr></table></figure></p>
+<p>  <em>.slice(start, end)</em> 方法，如果只有start参数，则返回从start到数组结尾的副本。如果包含end参数，则返回从start到end-1的数组副本。如果start &lt; end，返回一个空数组。如果start或end为负数，则加上数组长度直到值变为正数为止。<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line">var b = a.slice(<span class="number">-5</span>, <span class="number">-1</span>);</div><div class="line">console.log(b) <span class="comment">// [2], 因为a.length = 3, -5 + 3 + 3 = 1, -1 + 3 = 2, 从第1位到第2 - 1位进行截取</span></div></pre></td></tr></table></figure></p>
+<p>  <em>.splice()</em> 这一方法可以删除、插入或替换数组中的任意项，并且返回被删除的所有项：<br>  <figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> colors = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</div><div class="line"></div><div class="line"><span class="comment">/* 删除某几项，需要两个参数： 要删除的第一项位置和要删除的项数 */</span></div><div class="line"><span class="built_in">var</span> removed = colors.<span class="built_in">splice</span>(<span class="number">0</span>, <span class="number">1</span>); //删除第一项</div><div class="line">console.<span class="built_in">log</span>(colors); //[<span class="string">"green"</span>, <span class="string">"blue"</span>]</div><div class="line">console.<span class="built_in">log</span>(removed); //[<span class="string">"red"</span>]</div><div class="line"></div><div class="line"><span class="comment">/* 插入某几项，需要三个参数：起始位置、0（删除的项数）和要插入的项 */</span></div><div class="line"><span class="built_in">var</span> inserted = colors.<span class="built_in">splice</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="string">"yellow"</span>);//在第一项上插入</div><div class="line">console.<span class="built_in">log</span>(colors); //[<span class="string">"red"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</div><div class="line">console.<span class="built_in">log</span>(inserted); //[]</div><div class="line"></div><div class="line"><span class="comment">/* 替换某几项，需要三个参数：起始位置、要删除的项数和要插入的项 */</span></div><div class="line"><span class="built_in">var</span> replaced = colors.<span class="built_in">splice</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="string">"yellow"</span>);</div><div class="line">console.<span class="built_in">log</span>(colors); //[<span class="string">"red"</span>, <span class="string">"yellow"</span>, <span class="string">"blue"</span>];</div></pre></td></tr></table></figure></p>
+<h2 id="位置方法"><a href="#位置方法" class="headerlink" title="位置方法"></a><strong>位置方法</strong></h2><p>  <em>.indexOf()</em> 从前往后查找数组，lastIndexOf()从后往前查找数组，都返回要查找的项在数组中的第一个被查找到的位置。当找不到时返回-1。这两个函数都有两个参数，分别是待查找的项和查找起始点。</p>
+<h2 id="迭代方法"><a href="#迭代方法" class="headerlink" title="迭代方法"></a><strong>迭代方法</strong></h2><p>  数组共有五个迭代方法，分别是 <em>every()</em>，<em>filter()</em>，<em>forEach()</em>，<em>map()</em>，和 <em>some()</em>。每个方法都有两个参数，分别是要在每项上运行的函数和运行该函数的作用域对象（第二个参数影响this的值，我们在后面学习原型的时候再详细讨论，现在先把第二个参数忽略）。对于第一个参数中的函数，它本身又有三个参数，分别是某项、该项的位置和数组本身。<br>  先来看最简单的 <em>every()</em> 和 <em>some()</em> 两个函数：<br>  <figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</div><div class="line">/* 当每项都返回<span class="literal">true</span>时，<span class="keyword">every</span>()返回<span class="literal">true</span> */</div><div class="line">var everyResult = arr.<span class="keyword">every</span>(<span class="keyword">function</span>(<span class="literal">item</span>, index, <span class="keyword">array</span>)&#123;</div><div class="line">  return item &gt; <span class="number">2</span>;</div><div class="line">&#125;)</div><div class="line">console.log(everyResult); //<span class="literal">false</span></div><div class="line"></div><div class="line">/* 当至少一项都返回<span class="literal">true</span>时，<span class="keyword">some</span>()返回<span class="literal">true</span> */</div><div class="line">var someResult = arr.<span class="keyword">some</span>(<span class="keyword">function</span>(<span class="literal">item</span>, index, <span class="keyword">array</span>)&#123;</div><div class="line">  return item &gt; <span class="number">2</span>;</div><div class="line">&#125;)</div><div class="line">console.log(someResult); //<span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<p>  <em>filter()</em> 返回所有符合要求的项组成的数组：<br>  <figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> filterResult = arr.filter(<span class="function"><span class="keyword">function</span><span class="params">(item, <span class="keyword">index</span>, <span class="keyword">array</span>)</span><span class="comment">&#123;</span></span></div><div class="line">  return item &gt; 2;</div><div class="line">&#125;)</div><div class="line"><span class="title">console</span>.<span class="title">log</span><span class="params">(filterResult)</span>; <span class="comment">//[3, 4]</span></div></pre></td></tr></table></figure></p>
+<p>  <em>map()</em> 返回的也是一个数组，是对每一项进行操作后取得的新的项组成的数组：<br>  <figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mapResult = arr.map(<span class="function"><span class="keyword">function</span><span class="params">(item, <span class="keyword">index</span>, <span class="keyword">array</span>)</span><span class="comment">&#123;</span></span></div><div class="line">  return item * 2;</div><div class="line">&#125;)</div><div class="line"><span class="title">console</span>.<span class="title">log</span><span class="params">(mapResult)</span>; <span class="comment">//[2, 4, 6, 8]</span></div></pre></td></tr></table></figure></p>
+<p>  <em>forEach()</em> 函数没有返回值，就相当于对数组每一项进行了一个for循环操作。</p>
+<h2 id="归并方法"><a href="#归并方法" class="headerlink" title="归并方法"></a><strong>归并方法</strong></h2><p>  归并方法的语法和迭代方法有些类似，都是通过遍历数组的项来执行某些操作。JavaScript提供 <em>reduce()</em> 和 <em>reduceRight()</em> 两种归并方法，分别从左到右和从右到左进行归并。包含两个参数：在每一项上调用的函数和作为归并基础的初始值。其中调用函数又包含四个参数：前一个值，当前值，项的索引和数组对象。以下代码可以返回一个数组所有项的和：<br>  <figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// prev最开始是第一项，即1，cur最开始是第二项，即2</span></div><div class="line"><span class="keyword">var</span> reduceResult = arr.reduce(<span class="function"><span class="keyword">function</span><span class="params">(prev, cur, <span class="keyword">index</span>, <span class="keyword">array</span>)</span><span class="comment">&#123;</span></span></div><div class="line">  return prev + cur;</div><div class="line">&#125;)</div><div class="line"><span class="title">console</span>.<span class="title">log</span><span class="params">(reduceResult)</span>; <span class="comment">//10</span></div></pre></td></tr></table></figure></p>
+<p>在下一篇读书笔记中，将介绍剩余的一些引用类型。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div style= "margin-bottom: 10px">如果您喜欢我，就帮我的主人买包旺旺仙贝吧O(∩_∩)O！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>买买买</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/weichat.jpg" alt="Hanfei Lin WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="Hanfei Lin Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i>  读到这里的都是真爱 ❤-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据类型/" rel="tag"># 数据类型</a>
+          
+            <a href="/tags/引用类型/" rel="tag"># 引用类型</a>
+          
+            <a href="/tags/数组/" rel="tag"># 数组</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/读书笔记-JS高级-4/" rel="next" title="引用类型中的对象和函数">
+                <i class="fa fa-chevron-left"></i> 引用类型中的对象和函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/29/读书笔记-JS高级-6/" rel="prev" title="引用类型中的Date，RegExp，基本包装类型和单体内置对象">
+                引用类型中的Date，RegExp，基本包装类型和单体内置对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Hanfei Lin" />
+          <p class="site-author-name" itemprop="name">Hanfei Lin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ForestCold" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://linkedin.com/in/hanfei-lin" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin-square"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/3232698014?topnav=1&wvr=6&topsug=1&is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Array"><span class="nav-number">1.</span> <span class="nav-text">Array</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义数组"><span class="nav-number">1.1.</span> <span class="nav-text">定义数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引数组"><span class="nav-number">1.2.</span> <span class="nav-text">索引数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检测数组"><span class="nav-number">1.3.</span> <span class="nav-text">检测数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换数组"><span class="nav-number">1.4.</span> <span class="nav-text">转换数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#栈方法"><span class="nav-number">1.5.</span> <span class="nav-text">栈方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#队列方法"><span class="nav-number">1.6.</span> <span class="nav-text">队列方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重排序方法"><span class="nav-number">1.7.</span> <span class="nav-text">重排序方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作方法"><span class="nav-number">1.8.</span> <span class="nav-text">操作方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位置方法"><span class="nav-number">1.9.</span> <span class="nav-text">位置方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代方法"><span class="nav-number">1.10.</span> <span class="nav-text">迭代方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并方法"><span class="nav-number">1.11.</span> <span class="nav-text">归并方法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hanfei Lin</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2139993"></script>
+      <!-- UY END -->
+
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("PXcHUPmaGCHHAduS0ujzN7Pw-gzGzoHsz", "rkGKgaFFkY38Jw0pWlIGR9hv");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.1"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.1"></script>
+
+
+
+  <!--  -->
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

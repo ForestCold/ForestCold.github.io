@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/08/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-11/</loc>
+    <lastmod>2017-08-10T07:33:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>BOM(浏览器对象模型)</title>
+        <pubTime>2017-08-08T00:41:43.000Z</pubTime>
+        
+        <tag>BOM</tag>
+         
+        <tag>浏览器检测</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/08/04/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-10/</loc>
+    <lastmod>2017-08-04T14:38:04.000Z</lastmod>
+    <data>
+        <display>
+        <title>闭包、this对象和匿名函数</title>
+        <pubTime>2017-08-04T16:04:35.000Z</pubTime>
+        
+        <tag>闭包</tag>
+         
+        <tag>作用域</tag>
+         
+        <tag>this对象</tag>
+         
+        <tag>函数</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/08/04/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-9/</loc>
+    <lastmod>2017-08-04T10:04:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>作用域的相关概念和垃圾回收机制</title>
+        <pubTime>2017-08-04T16:04:34.000Z</pubTime>
+        
+        <tag>作用域</tag>
+         
+        <tag>参数传递</tag>
+         
+        <tag>垃圾回收</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/31/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-8/</loc>
+    <lastmod>2017-08-01T14:51:41.000Z</lastmod>
+    <data>
+        <display>
+        <title>原型链和寄生组合继承</title>
+        <pubTime>2017-08-01T01:04:34.000Z</pubTime>
+        
+        <tag>继承</tag>
+         
+        <tag>原型</tag>
+         
+        <tag>面向对象</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/31/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-7/</loc>
+    <lastmod>2017-08-01T12:37:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>对象的创建方法——构造函数和原型模式</title>
+        <pubTime>2017-07-31T20:04:34.000Z</pubTime>
+        
+        <tag>原型</tag>
+         
+        <tag>面向对象</tag>
+         
+        <tag>工厂模式</tag>
+         
+        <tag>构造函数</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-1/</loc>
+    <lastmod>2017-08-01T12:28:27.000Z</lastmod>
+    <data>
+        <display>
+        <title>JavaScript简史</title>
+        <pubTime>2017-07-28T14:54:05.000Z</pubTime>
+        
+        <tag>JavaScript</tag>
+         
+        <tag>DOM</tag>
+         
+        <tag>BOM</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-2/</loc>
+    <lastmod>2017-08-01T12:28:06.000Z</lastmod>
+    <data>
+        <display>
+        <title>在HTML中使用JavaScript</title>
+        <pubTime>2017-07-28T20:08:39.000Z</pubTime>
+        
+        <tag>JavaScript</tag>
+         
+        <tag>HTML</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-3/</loc>
+    <lastmod>2017-08-01T12:27:53.000Z</lastmod>
+    <data>
+        <display>
+        <title>数据类型分类和基本类型</title>
+        <pubTime>2017-07-29T19:06:58.000Z</pubTime>
+        
+        <tag>数据类型</tag>
+         
+        <tag>基本类型</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-4/</loc>
+    <lastmod>2017-08-01T12:27:36.000Z</lastmod>
+    <data>
+        <display>
+        <title>引用类型中的对象和函数</title>
+        <pubTime>2017-07-29T19:06:59.000Z</pubTime>
+        
+        <tag>函数</tag>
+         
+        <tag>数据类型</tag>
+         
+        <tag>引用类型</tag>
+         
+        <tag>对象</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-5/</loc>
+    <lastmod>2017-08-01T12:27:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>引用类型中的数组</title>
+        <pubTime>2017-07-29T19:07:00.000Z</pubTime>
+        
+        <tag>数据类型</tag>
+         
+        <tag>引用类型</tag>
+         
+        <tag>数组</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-6/</loc>
+    <lastmod>2017-08-01T12:27:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>引用类型中的Date，RegExp，基本包装类型和单体内置对象</title>
+        <pubTime>2017-07-30T01:06:59.000Z</pubTime>
+        
+        <tag>数据类型</tag>
+         
+        <tag>引用类型</tag>
+         
+        <tag>正则表达式</tag>
+         
+        <tag>基本包装类型</tag>
+         
+         
+           
+             
+              <breadCrumb title="读书笔记" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+          
+             
+              <breadCrumb title="JavaScript高级程序设计" url="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/30/typeof%E5%92%8C%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</loc>
+    <lastmod>2017-08-01T08:58:03.000Z</lastmod>
+    <data>
+        <display>
+        <title>JavaScript中的typeof和强制类型转换</title>
+        <pubTime>2017-07-30T16:06:59.000Z</pubTime>
+        
+        <tag>typeof</tag>
+         
+        <tag>强制类型转换</tag>
+         
+         
+           
+             
+              <breadCrumb title="JavaScript小知识" url="http://hanfeilin.com/categories/JavaScript%E5%B0%8F%E7%9F%A5%E8%AF%86/"/>
+          
+             
+              <breadCrumb title="数据类型" url="http://hanfeilin.com/categories/JavaScript%E5%B0%8F%E7%9F%A5%E8%AF%86/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+  <url>
+    <loc>http://hanfeilin.com/2017/07/28/LintCode-1/</loc>
+    <lastmod>2017-07-30T15:16:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>LintCode做题整理 之 二分法</title>
+        <pubTime>2017-07-29T04:03:08.000Z</pubTime>
+        
+        <tag>二分法</tag>
+         
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="LintCode" url="http://hanfeilin.com/categories/LintCode/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+</urlset>

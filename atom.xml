@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Magic Yummy&#39;s home</title>
+  <subtitle>玛吉雅米の窝  ｡◕‿◕｡</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://hanfeilin.com/"/>
+  <updated>2017-08-10T07:33:48.000Z</updated>
+  <id>http://hanfeilin.com/</id>
+  
+  <author>
+    <name>Hanfei Lin</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>BOM(浏览器对象模型)</title>
+    <link href="http://hanfeilin.com/2017/08/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-11/"/>
+    <id>http://hanfeilin.com/2017/08/07/读书笔记-JS高级-11/</id>
+    <published>2017-08-08T00:41:43.000Z</published>
+    <updated>2017-08-10T07:33:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>BOM</code>    <code>windo对象</code>    <code>location对象</code>    <code>navigator对象</code>    <code>能力检测</code>    <code>怪癖检测</code>    <code>用户代理检测</code>    <code>对应「JavaScript高级程序设计」中第八章和第九章</code></p>
+<a id="more"></a>
+<hr>
+<h1 id="BOM中的对象"><a href="#BOM中的对象" class="headerlink" title="BOM中的对象"></a>BOM中的对象</h1><p>BOM（浏览器对象模型）是HTML5规范中的一部分，在第一篇读书笔记中讲到，它与ECMAScript标准和DOM共同构成了JavaScript。BOM中包含的对象属性和方法主要用于和浏览器相关的操作，主要对象有window对象, location对象和navigator对象。</p>
+<h2 id="window对象"><a href="#window对象" class="headerlink" title="window对象"></a>window对象</h2><blockquote>
+<p>window对象表示浏览器的一个实例，即是JavaScript访问浏览器的接口，也是ECMAScript中定义的Global对象。</p>
+</blockquote>
+<p>每一个框架都有自己的window对象，所有的框架组成了一个名为frames的数组。</p>
+<p>前面说过全局变量等同于定义在window上的变量，但全局变量不能通过delete操作符删除，但定义在window上的变量可以。尝试访问未声明的变量会抛出错误，但是通过查询window对象可以知道某个可能未声明的变量是否存在。</p>
+<ul>
+<li><p><strong>窗口框架</strong></p>
+<p>以下代码将浏览器分成了一个topFrame窗口和两个互为兄弟窗口的leftFrame窗口和rightFrame窗口：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Frameset Example<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">frameset</span> <span class="attr">rows</span> = <span class="string">"100, *"</span>&gt;</span>                           //按行分成了两个frame，一个高度为100，一个为剩下高度</div><div class="line">    <span class="tag">&lt;<span class="name">frame</span> <span class="attr">src</span> = <span class="string">"frame.htm"</span> <span class="attr">name</span> = <span class="string">"topFrame"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">frameset</span> <span class="attr">cols</span> = <span class="string">"50%, 50%"</span>&gt;</span>                       //按列分成了两个frame，各占50%的宽度</div><div class="line">      <span class="tag">&lt;<span class="name">frame</span> <span class="attr">src</span> = <span class="string">"leftframe.htm"</span> <span class="attr">name</span> = <span class="string">"leftFrame"</span>&gt;</span> //htm和html后缀没有本质区别</div><div class="line">      <span class="tag">&lt;<span class="name">frame</span> <span class="attr">src</span> = <span class="string">"rightframe.htm"</span> <span class="attr">name</span> = <span class="string">"rightFrame"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">frameset</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">frameset</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>和框架有关的对象共三个：top对象（最外层框架，也就是浏览器窗口）、parent对象（某个框架的父对象）、self对象（和window对象没有区别）。</p>
+</li>
+<li><p><strong>窗口大小和位置</strong></p>
+<p>无法跨浏览器获取浏览器窗口的大小。<em>Window.outerWidth</em> 获取浏览器窗口外部的宽度。表示整个浏览器窗口的宽度，包括侧边栏（如果存在）、窗口镶边（window chrome）和调正窗口大小的边框（window resizing borders/handles）。<em>window.innerWidth</em> 表示浏览器视口（viewport）宽度（单位：像素），如果存在垂直滚动条则包括它。<em>document.documentElement.clientWidth</em> 表示HTML文档所在窗口的当前宽度。</p>
+<p><em>resizeTo()</em> 和 <em>resizeBy()</em> 可以调整浏览器窗口的大小。<em>resizeTo()</em> 接收参数为新的宽度和高度，<em>resizeBy()</em> 接收宽度为新的宽度高度与原宽度高度之差。</p>
+<p>跨域取得窗口左上角位置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> leftPos = (<span class="keyword">typeof</span> <span class="built_in">window</span>.screenLeft == <span class="string">"number"</span>) ? <span class="built_in">window</span>.screenLeft : <span class="built_in">window</span>.screenX;</div><div class="line"><span class="keyword">var</span> topPos = (<span class="keyword">typeof</span> <span class="built_in">window</span>.screenTop == <span class="string">"number"</span>) ? <span class="built_in">window</span>.screenTop : <span class="built_in">window</span>.screenY;</div></pre></td></tr></table></figure>
+<p><em>moveTo()</em> 接收新位置的x和y坐标值，<em>moveBy()</em> 接收水平和垂直方向上的移动像素数。</p>
+</li>
+<li><p><strong>间歇调用和超时调用</strong></p>
+<p><em>setTimeout()</em> 表示超时调用，作用域指向全局作用域。<em>setInterval()</em> 表示间歇调用，但是在实际开发中很少真正被使用，因为后一个调用可能在前一个调用结束之前开启。</p>
+<p>一般使用超时调用来模拟间歇调用：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> <span class="built_in">num</span> = <span class="number">0</span>;</div><div class="line"><span class="built_in">var</span> <span class="built_in">max</span> = <span class="number">10</span>;</div><div class="line">function incrementNumber() &#123;</div><div class="line">  <span class="built_in">num</span>++;</div><div class="line">  <span class="keyword">if</span> (<span class="built_in">num</span> &lt; <span class="built_in">max</span>)&#123;</div><div class="line">    setTimeout(incrementNumber, <span class="number">500</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    alert(<span class="string">"Done"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一般认为这是一种间歇调用的最佳模式。在这个例子中，超时调用模拟的间歇调用的作用是每过一段时间增加一次num的值。</p>
+</li>
+<li><p><strong>系统对话框</strong></p>
+<p><em>alert()</em> 弹出只有OK按钮的警告框，<em>confirm()</em> 弹出有OK和CANCEL两个按钮的确认框，<em>prompt()</em> 弹出一个包含OK和CANCEL按钮，并且还有一个用户输入框的提示框。</p>
+</li>
+</ul>
+<h2 id="location对象"><a href="#location对象" class="headerlink" title="location对象"></a>location对象</h2><p>window.location和document.location引用同一个对象。<br><figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">window.location(<span class="string">"http: //www.hanfeilin.com"</span>)<span class="comment">;</span></div><div class="line">location.href(<span class="string">"http: //www.hanfeilin.com"</span>)<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>以上两行代码的效果是相同的，都是打开新的URL并在历史记录中生成一条记录。而使用 <em>location.replace(URL)</em> 方法可以在跳转到URL的同时禁用后退按钮。<em>location.reload()</em> 可以重新加载当前页面，如果括号中的参数为true，则指定向服务器中加载。</p>
+<p>怎么解析URL地址？location对象包括 <em>location.protocal</em>，<em>location.host</em>，<em>location.pathname</em>，<em>location.search</em>,<em>location.hash</em> 等。protocal指的是协议，包括http协议和https协议。host是域名。pathname是路径。search是?后面的查询参数。hash是#后面的哈希内容。一般一个网址的构成为：协议 + 域名 + 路径 + ? + 查询参数 + # + 哈希内容。</p>
+<h2 id="navigator对象"><a href="#navigator对象" class="headerlink" title="navigator对象"></a>navigator对象</h2><p>navigator中有一个plugins属性，记录了浏览器中安装的插件信息，可以循环遍历数组对比每个元素和要查找的插件名字来检测插件。但是这个方法对IE无效，在IE中只能使用ActiveXObject类型并创建特定插件实例来达到效果。并且，在IE中还必须知道插件的标识符。以下代码是在任意浏览器中检测FLASH插件的方法：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在IE中无效</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">hasPlugin</span><span class="params">(name)</span> </span>&#123;</div><div class="line">  name = name.toLowerCase();</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; navigator.plugins.length; i++)&#123;</div><div class="line">    <span class="keyword">if</span> (navigator.plugins[i].name.toLowerCase().indexOf(name) &gt; <span class="number">-1</span>)&#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//检测IE中的插件</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">hasIEPlugin</span><span class="params">(name)</span> </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">new</span> ActiveXObject (name);</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  &#125; <span class="keyword">catch</span> (ex) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//检测所有浏览器中的FLASH插件</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">hasFlash</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> result = hasPlugin(<span class="string">"Flash"</span>);</div><div class="line">  <span class="keyword">if</span> (!result) &#123;</div><div class="line">    result = hasIEPlugin(<span class="string">"ShockwaveFlash.ShockwaveFlash"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>navigator还有个userAgent属性，在某些情况中可以检测浏览器类型：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var ua</span> = navigator.userAgent;</div><div class="line"><span class="attribute">var isChrome</span> = ua.indexOf(<span class="string">'Chrome'</span>);</div></pre></td></tr></table></figure></p>
+<p>但是并不保证所有情况都能检测出来，比如存在电子欺骗的情况。</p>
+<h2 id="history对象"><a href="#history对象" class="headerlink" title="history对象"></a>history对象</h2><p><em>history.go(某个数字)</em> 表示页面跳转，参数为正数就是向前跳转，为负数就是向后跳转。<em>hitsory.back()</em> 和 <em>history.forward()</em> 表示后退或前进一页。</p>
+<h1 id="客户端检测的几个概念"><a href="#客户端检测的几个概念" class="headerlink" title="客户端检测的几个概念"></a>客户端检测的几个概念</h1><ul>
+<li><p><strong>能力检测（特性检测）</strong> 检测用来确定在当前浏览器环境中某个特性是否按照适当方式行事。一般用 <em>typeof x == function</em> 来进行检测。</p>
+</li>
+<li><p><strong>怪癖检测（quirks detection）</strong> 表示检测浏览器中某个特定的bug。</p>
+</li>
+<li><p><strong>用户代理检测</strong> 用户代理检测是为了对付电子欺骗（spoofing），通过检测用户代理字符串来识别浏览器。  </p>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;BOM&lt;/code&gt;    &lt;code&gt;windo对象&lt;/code&gt;    &lt;code&gt;location对象&lt;/code&gt;    &lt;code&gt;navigator对象&lt;/code&gt;    &lt;code&gt;能力检测&lt;/code&gt;    &lt;code&gt;怪癖检测&lt;/code&gt;    &lt;code&gt;用户代理检测&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中第八章和第九章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="BOM" scheme="http://hanfeilin.com/tags/BOM/"/>
+    
+      <category term="浏览器检测" scheme="http://hanfeilin.com/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%A3%80%E6%B5%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>闭包、this对象和匿名函数</title>
+    <link href="http://hanfeilin.com/2017/08/04/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-10/"/>
+    <id>http://hanfeilin.com/2017/08/04/读书笔记-JS高级-10/</id>
+    <published>2017-08-04T16:04:35.000Z</published>
+    <updated>2017-08-04T14:38:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>闭包</code>    <code>匿名函数</code>    <code>this对象</code>    <code>模仿块级作用域</code>    <code>分组操作符</code>    <code>私有变量</code>    <code>静态私有变量</code>    <code>模块模式</code>    <code>增强的模块模式</code>    <code>对应「JavaScript高级程序设计」中部分第四章和部分第七章</code></p>
+<a id="more"></a>
+<hr>
+<p>这一部分接着上一篇博文继续讲解作用域方面的概念，不过，比起上一篇博文，这里的概念要难理解不少。</p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><blockquote>
+<p><em>闭包</em> 是指有权访问另一个函数作用域中的变量的函数。常见的创建方式是在一个函数中创建另一个函数。</p>
+</blockquote>
+<p>根据之前学过的作用域链，我们很容易理解闭包为什么能够访问外层函数中的变量。当一个函数中不包含其它函数时，执行完它之后它所对应的活动对象将被销毁。但包含闭包的函数，在外层函数被执行之后，活动对象仍然存在。这是因为内层闭包能够访问外层函数的变量，所以必须将它们保留下来。这是为什么不能滥用闭包的原因，滥用闭包会导致内存浪费。</p>
+<p>下面我们用一个例子来说明闭包的作用。假设我们想在浏览器末端创建十个&lt;a&#62;标签，点击标签弹出对应的序号。在不了解JavaScript中的作用域机制时，我们很可能会写成下面这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i,a;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">	a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</div><div class="line">	a.innerHTML = i + <span class="string">'&lt;br&gt;'</span>;</div><div class="line">	a.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">		e.preventDefault();                     <span class="comment">//屏蔽click中的默认操作</span></div><div class="line">		alert(i);</div><div class="line">	&#125;)</div><div class="line">	<span class="built_in">document</span>.body.appendChild(a);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码的执行的结果是点击所有标签，输出都为10。造成这一现象的原因是JavaScript中不存在块级作用域，所以i实际是一个全局变量，当调用 <em>alert(i);</em> 这个语句时，访问的是全局中的i，而在这段代码执行完之后i的值已经被设置为了10。正确的写法应该是这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i,a;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params">i</span>) </span>&#123;</div><div class="line">  	a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</div><div class="line">  	a.innerHTML = i + <span class="string">'&lt;br&gt;'</span>;</div><div class="line">  	a.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  		e.preventDefault();</div><div class="line">  		alert(i);</div><div class="line">  	&#125;)</div><div class="line">  	<span class="built_in">document</span>.body.appendChild(a);</div><div class="line">	&#125;)(i);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>这一段代码和上一段代码的不同之处，是在for循环的外部包了一层(function(i){})(i)匿名函数。后面的括号表示立即执行并且传入参数为i。这种写法实际上是用匿名函数来 <strong>模拟块级作用域</strong>。此时，i（匿名函数的参数i，而不是外面定义的变量i）就变成了这个块级作用域中的变量。当调用 <em>alert(i)</em> 时，根据作用域链的原理，首先访问的是匿名函数内部的i，此时的i就是正确的值。</p>
+<ul>
+<li><p><strong>匿名函数</strong> 指的是没有函数名的函数，它的name属性为空。注意，函数名指的是function关键字后面的那个名字，对于一个函数表达式 <em>var fun = function(){}</em> 而言，fun只是一个指向它的变量，这个函数本身仍然是一个匿名函数。由于语法规定函数声明必须带有名字，所以匿名函数通常出现在函数表达式中。由于匿名函数不会被加入变量对象中，所以它们的作用域是全局作用域。当匿名函数被执行完毕，里面的变量会被立即销毁。</p>
+</li>
+<li><p><strong>为什么不能写成function(i){}(i)?</strong> 我们之前学过变量对象的初始化过程，当解释器找到一个function关键字时，就将它当做一个函数声明。然而，通过函数声明出来的函数必须有函数名，不能是匿名函数，所以这时候会抛出一个错误。解决方法就是将函数用小括号括起来。小括号其实是 <strong>分组操作符</strong> ，它内部的内容会被看做一个表达式。而它执行的结果就是这个表达式的返回值，当表达式中只有一个函数时返回值就是这个函数。</p>
+</li>
+<li><p><strong>块级作用域的作用</strong> 除了这个例子之外，块级作用域主要用来在全局变量中限制过多设置的全局对象。试想如果每个程序员都自己设置了一大堆全局变量，很容易引起变量名的冲突，这时候块级作用域就派上用场了。JQuery源码就是一个运用块级作用域的例子。</p>
+</li>
+</ul>
+<h1 id="this对象"><a href="#this对象" class="headerlink" title="this对象"></a>this对象</h1><p>JavaSript中的this对象只的是调用当前函数的对象。this对象是在函数调用的时候生成的（记得之前说过变量对象包含一个this对象，而变量对象是在函数调用时才生成的），和函数定义无关。对于所有全局变量和全局函数，由于它们是被挂到window对象上的，因此它们的this对象是window。而对于其它函数，this对象通常是这个函数执行时函数前面的点前面的那个对象。</p>
+<ul>
+<li><p>通过构造函数new一个新的对象时会改变this的指向。new的过程： 首先开辟一块内存空间，将this指向这片内存。然后给this依次挂上构造函数里的属性和方法。最后返回this。</p>
+</li>
+<li><p>对于函数表达式而言，this指向的并不是它右边函数前面的点前面的对象，而是左边变量被谁调用就指向谁，一般来说指向window。</p>
+</li>
+<li><p>对于有返回值的构造函数而言，如果返回值是一个对象（除了null），this指向那个对象，如果返回值是一个值，this指向它构造出来的实例（这种情况和第一条一样）。</p>
+</li>
+</ul>
+<h2 id="闭包中的this问题"><a href="#闭包中的this问题" class="headerlink" title="闭包中的this问题"></a>闭包中的this问题</h2><p>闭包中的this是不会指向闭包外部的函数的，因为对this的搜索只局限于当前活动对象，不会随着作用域链向上搜索。来看书上的一个例子：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">  name : <span class="string">"My object"</span>,</div><div class="line">  getNameFunc : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">alert(object.getNameFunc()()); <span class="comment">//"The Window"</span></div></pre></td></tr></table></figure></p>
+<p>这一段代码中的this访问不到闭包外层函数，因此不会等于object。而匿名函数的this指向window，因此返回的是在window中定义的变量name。不过，就算返回的函数不是匿名函数输出也是一样，因为没有对象对它进行调用。要让this能够指向object只需：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">  name : <span class="string">"My object"</span>,</div><div class="line">  getNameFunc : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(that)</span> </span>&#123;</div><div class="line">      <span class="keyword">return</span> that.name;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">alert(object.getNameFunc()()); <span class="comment">//"The object"</span></div></pre></td></tr></table></figure></p>
+<p>这样，闭包就获得了object中this的值。</p>
+<p>下面是一个让我纠结了整整一天的例子，最后发现纠结的点根本不在于this的问题，而在于表达式的问题，这里也顺便呈现以下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name  = <span class="string">"The Window"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> </span>= &#123;</div><div class="line">  name : <span class="string">"My Object"</span>,</div><div class="line">  getName : function() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span>.<span class="title">getName</span>(<span class="params"></span>)</span>;                     <span class="comment">//"My Object"</span></div><div class="line">(<span class="class"><span class="keyword">object</span>.<span class="title">getName</span>)(<span class="params"></span>)</span>;                   <span class="comment">//"My Object"</span></div><div class="line">(<span class="class"><span class="keyword">object</span>.<span class="title">getName</span> </span>= <span class="class"><span class="keyword">object</span>.<span class="title">getName</span>)(<span class="params"></span>)</span>;  <span class="comment">//"The Window"</span></div></pre></td></tr></table></figure></p>
+<p>让人纠结的是第11行和第12行的代码，我们之前说过一对小括号是一个分组操作符，实际上一对小括号会对应一个返回值。第11行这种情况返回值就是object.getName，而第12行的返回值是等式右边的object.getName。右边的object.getName实际上就是一个匿名函数（其实不匿名结果是一样的），这句话等价于：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure></p>
+<p>这个函数中的this指向的是window。</p>
+<blockquote>
+<p>对于a = b = c这个表达式来说，实际上等价于a = (b = c)，而(b = c)返回的是c不是b，因此a最终的值为c。</p>
+</blockquote>
+<h1 id="利用闭包构造私有变量"><a href="#利用闭包构造私有变量" class="headerlink" title="利用闭包构造私有变量"></a>利用闭包构造私有变量</h1><p>任何函数中定义的变量都可以被称为 <strong>私有变量</strong>，因为没法在函数外部访问这些变量。有权访问这些私有变量的方法被称为 <strong>特权方法（privileged method）</strong>。</p>
+<h2 id="构造函数中定义私有变量"><a href="#构造函数中定义私有变量" class="headerlink" title="构造函数中定义私有变量"></a>构造函数中定义私有变量</h2><p>将私有变量定义在构造函数中，并且前面不加上this.，而特权方法前面加上this.。好处是所有实例不共享私有变量，坏处是同一个特权方法在不同实例中占用不同内存（参见继承中的构造函数模式）。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyObject</span> <span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="keyword">this</span>.publicMethod = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    privateVariable++;</div><div class="line">    <span class="keyword">return</span> privateFunction();</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="静态私有变量"><a href="#静态私有变量" class="headerlink" title="静态私有变量"></a>静态私有变量</h2><p>通过一个匿名函数构造块级作用域，封装构造函数，并用原型编写特权方法。好处是特权方法在同一片内存中，坏处是所有实例共享私有变量（参见继承中的原型模式）。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  MyObject = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; <span class="comment">//构造函数</span></div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  MyObject.prototype.publicMethod = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    privateVariable++;</div><div class="line">    <span class="keyword">return</span> privateFunction();</div><div class="line">  &#125;;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<p>这里需要注意的是构造函数的写法。如果我们写成函数声明或加上var关键字的函数表达式形式，这个构造函数都会变成块级作用域中的私有函数。显然，这样是不对的，所以我们将其设置为一个匿名函数，这样这个构造函数就是全局变量，在块级作用域外部可以用它来创建实例。</p>
+<h2 id="模块模式（module-pattern）"><a href="#模块模式（module-pattern）" class="headerlink" title="模块模式（module pattern）"></a>模块模式（module pattern）</h2><p>这是一种为单例（singleton）创建私有变量的方法。单例就是只有一个实例的对象，通常通过字面量形式创建。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> singleton = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    publicProperty: <span class="literal">true</span>,</div><div class="line">    publicMethod: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">      privateVariable++;</div><div class="line">      <span class="keyword">return</span> privateFunction();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;();</div></pre></td></tr></table></figure></p>
+<p>这种创建方式的不足之处在于实例类型是object。如果需要规定一个实例类型，就要用到增强的模块模式。</p>
+<h2 id="增强的模块模式"><a href="#增强的模块模式" class="headerlink" title="增强的模块模式"></a>增强的模块模式</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> singleton = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> object = <span class="keyword">new</span> customType(); <span class="comment">//customType为想要继承的对象类型</span></div><div class="line"></div><div class="line">  object.publicProperty: <span class="literal">true</span>,</div><div class="line">  object.publicMethod: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">      privateVariable++;</div><div class="line">      <span class="keyword">return</span> privateFunction();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> object;</div><div class="line">&#125;();</div></pre></td></tr></table></figure>
+<p>和模块模式唯一的不同就是返回值是一个new出来的对象。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;闭包&lt;/code&gt;    &lt;code&gt;匿名函数&lt;/code&gt;    &lt;code&gt;this对象&lt;/code&gt;    &lt;code&gt;模仿块级作用域&lt;/code&gt;    &lt;code&gt;分组操作符&lt;/code&gt;    &lt;code&gt;私有变量&lt;/code&gt;    &lt;code&gt;静态私有变量&lt;/code&gt;    &lt;code&gt;模块模式&lt;/code&gt;    &lt;code&gt;增强的模块模式&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第四章和部分第七章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="闭包" scheme="http://hanfeilin.com/tags/%E9%97%AD%E5%8C%85/"/>
+    
+      <category term="作用域" scheme="http://hanfeilin.com/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
+    
+      <category term="this对象" scheme="http://hanfeilin.com/tags/this%E5%AF%B9%E8%B1%A1/"/>
+    
+      <category term="函数" scheme="http://hanfeilin.com/tags/%E5%87%BD%E6%95%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>作用域的相关概念和垃圾回收机制</title>
+    <link href="http://hanfeilin.com/2017/08/04/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-9/"/>
+    <id>http://hanfeilin.com/2017/08/04/读书笔记-JS高级-9/</id>
+    <published>2017-08-04T16:04:34.000Z</published>
+    <updated>2017-08-04T10:04:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>参数传递</code>    <code>值传递</code>    <code>引用传递</code>    <code>作用域</code>    <code>作用域链</code>    <code>函数声明</code>    <code>函数表达式</code>    <code>变量提升</code>    <code>执行上下文</code>    <code>变量对象</code>    <code>活动对象</code>    <code>函数调用栈</code>    <code>对应「JavaScript高级程序设计」中部分第四章和部分第七章</code></p>
+<a id="more"></a>
+<hr>
+<p>JavaScript中的作用域真的比原型还要难以理解，挣扎了两天好在总算是搞懂了。这一部分主要的难点之一在于出现了非常多新的概念，很容易把它们搞混。另一个主要的难点在于对闭包和this的理解，这一部分将在下一篇博文中进行整理。</p>
+<h1 id="参数传递机制"><a href="#参数传递机制" class="headerlink" title="参数传递机制"></a>参数传递机制</h1><p>主要的参数传递机制包括 <strong>按值传递</strong> 和 <strong>按引用传递</strong>。两者的主要区别在于按值传递的话形参的值等于实参的值，按引用传递的话形参的值等于实参的地址。JavaScript中所有的参数传递方式都是按值传递，无论传递的是基本数据类型还是引用数据类型。</p>
+<p>对于基本数据类型的按值传递非常好理解，形参的值自然等于实参的值，在函数内部对形参进行修改，是不会影响到函数外部实参的值的。可是对于引用类型，很多人会误认为它是按引用传递的，这么认为的理由是在函数内部对引用类型的形参的修改，能够影响到函数外部引用类型的实参的值。</p>
+<p>但是需要注意的是，JavaScript中引用类型变量本身，保存的就是对象地址。因此将引用类型变量本身赋值给一个函数的形参时，赋值过去的就是对象的地址。函数在函数体中能够访问这个对象所在的内存空间，因此对它的修改才会反应到函数外部。以下代码能够证明引用类型是按值传递的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function setName(<span class="class"><span class="keyword">object</span>)</span>&#123;</div><div class="line">  <span class="class"><span class="keyword">object</span>.<span class="title">name</span> </span>= <span class="string">"Yummy"</span>;</div><div class="line">  <span class="class"><span class="keyword">object</span> </span>= <span class="keyword">new</span> <span class="type">Object</span>();</div><div class="line">  <span class="class"><span class="keyword">object</span>.<span class="title">name</span> </span>= <span class="string">"Magic"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="type">Object</span>();</div><div class="line">setName(person);</div><div class="line">alert(person.name); <span class="comment">//"Yummy"</span></div></pre></td></tr></table></figure>
+<p>这段函数中对object的赋值操作无法影响到person.name属性，证明了object是按值传递的。如果person的属性被修改，打印出的是”Magic”的话，就证明object是按引用传递的。为什么呢？我们可以通过下图更清晰地了解。</p>
+<p><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-9-1.jpg" alt=""></p>
+<p>在按值传递的情况下，函数接收到的参数是person的值，这张图中是2这个值，对应了person所指向的对象的地址。当执行到第三行时，实际上是在另一个地址区新建了一个对象（这张图中在地址3中）。由于object的值是2，是一个堆内存中的地址，因此执行完这句话仅仅是将object的值变成了3而已，person中保存的仍然是地址2，所以person.name仍然是地址2处的name。</p>
+<p>在按引用传递的情况下，函数接收到的参数是person的地址，这张图中对应1这个值。当执行第3句话时，在地址3处新建了一个对象，由于object是一个地址，给它赋值相当于给它所在的内存区域赋值，因此1这个地址的值由2变成了3，person的指向由图中的实线变成了虚线，此时打印出来的自然就是地址3处的name。</p>
+<h1 id="作用域的相关概念"><a href="#作用域的相关概念" class="headerlink" title="作用域的相关概念"></a>作用域的相关概念</h1><p>JavaScript中的作用域包含非常多的概念。在ECMAScript5以及ECMAScript5之前JavaScript中没有块级作用域的概念，只有函数作用域和全局作用域。</p>
+<h2 id="执行上下文（Execution-Context）"><a href="#执行上下文（Execution-Context）" class="headerlink" title="执行上下文（Execution Context）"></a>执行上下文（Execution Context）</h2><blockquote>
+<p><strong>执行上下文</strong>，有时候称为执行环境，指的是代码的运行环境。执行上下文和作用域的概念有所不同，作用域指的是当前执行上下文（也就是 <strong>活动上下文</strong> ）包含的 <strong>变量对象</strong> 。</p>
+</blockquote>
+<p>执行上下文有两种情况确定。当浏览器开始执行一段JavaScript代码的时候，创建并进入的是全局执行上下文。每当一个函数被调用的时候，为其创建并进入一个函数执行上下文。这些执行上下文都按照次序保存在一个 <strong>执行上下文栈</strong> 中。每创建一个执行上下文就将它压栈，离开一个执行上下文就将它从栈中弹出。而处于栈顶的执行上下文被称为活动上下文，代表当前正在执行的代码的运行环境。</p>
+<p>一个执行上下文中，包含了以下三个变量：</p>
+<ul>
+<li>变量对象（Variable object），包含当前执行作用域中的形参、变量声明和函数声明</li>
+<li>作用域链（Scope chain），指针链表，每一个节点都指向一个变量对象</li>
+<li><p>this，将在下一篇博文中重点介绍</p>
+<p>下面来看看变量对象和作用域链是怎么回事。</p>
+</li>
+</ul>
+<h2 id="变量对象"><a href="#变量对象" class="headerlink" title="变量对象"></a>变量对象</h2><blockquote>
+<p><strong>变量对象</strong> 是与执行上下文相关的数据作用域。它是一个与上下文相关的特殊对象，其中存储了在上下文中定义的变量和函数声明。</p>
+</blockquote>
+<p> 当一个函数被调用的时候，在所有代码被执行之前，会先为它初始化一个执行上下文。在初始化执行上下文中的变量对象时，首先遍历这个函数定义部分的内容，将所有形参、变量声明（var开头）和函数声明（function开头）放到变量对象中，并将变量声明赋值为undefined，将函数声明赋值为函数名和函数。如果发现一个变量的名字和已声明的变量和函数相同就跳过它，如果发现一个函数的名字和已声明的函数相同就覆盖它。这个过程也称为 <strong>变量提升</strong> 或 <strong>函数提升</strong> 。</p>
+<p> 特别需要注意的是，不以var和function进行声明的变量和函数将会被添加到全局作用域中。</p>
+<p> 接着，函数中的代码会被执行，遇到变量对象中的变量则更新它的值。下面通过一个例子来深入理解这一过程。</p>
+ <figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> (<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    console.<span class="built_in">log</span>(foo);     //undefined</div><div class="line">    console.<span class="built_in">log</span>(bar);     //<span class="function"><span class="keyword">function</span> <span class="title">bar</span><span class="params">()</span></span>&#123;  console.<span class="built_in">log</span>(<span class="string">"bar"</span>);  &#125;</div><div class="line">    console.<span class="built_in">log</span>(baz);     //<span class="function"><span class="keyword">function</span> <span class="title">baz</span><span class="params">()</span></span>&#123;  console.<span class="built_in">log</span>(<span class="string">"baz"</span>);  &#125;</div><div class="line"></div><div class="line">    var foo = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;&#125;;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bar</span><span class="params">()</span></span>&#123;</div><div class="line">        console.<span class="built_in">log</span>(<span class="string">"bar"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var bar = <span class="number">20</span>;</div><div class="line">    console.<span class="built_in">log</span>(bar);     //<span class="number">20</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">baz</span><span class="params">()</span></span>&#123;</div><div class="line">        console.<span class="built_in">log</span>(<span class="string">"baz"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+<p>这个例子中， (function(){…})()的语法是一个模拟块级作用域的语法，我们将在下一篇博文中详细介绍，这里只要理解这是一个作用域就行了。当进入这个作用域时，随即生成了一个执行上下文，其中的变量对象进行初始化。首先将所有var开头的变量声明加入变量对象并赋值undefined，然后将所有function开头的函数声明的名字和函数内容加入变量对象。</p>
+<p>接着，代码开始执行。首先打印foo，由于foo是由var关键字打头的，因此在存入变量对象时被赋值为undefined，代码从作用域链的顶端，即当前变量对象中查找foo发现找到了，值为undefined，所以打印结果为undefined。第三行和第四行，分别在变量对象中查找bar函数和baz函数的函数声明，发现都找到了，分别打印。而第13行需要特别注意，因为当解释器执行到第12行时，变量对象中bar的值会被重置为20，因此第13行打印出的结果就是20。</p>
+<h2 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h2><p>作用域链实质使一个链表，包含指向一堆变量对象的指针。它在一个执行上下文被创建的时候，首先拷贝上一层执行上下文的作用域链，然后将当前的变量对象放到原来的作用域链的顶端，并更新执行上下文中的指针，使之指向新添加进来的变量对象。</p>
+<p>作用域链的链表头包含的变量对象，也就是当前执行上下文的变量对象，被称为 <strong>活动对象</strong> 。作用域链的作用是进行 <strong>标识符解析</strong>，说白了就是查找一个变量。标识符解析总是从作用域链的链表头开始，如果找到就取出并不再往下查找，找不到就接着往上找，一直找到作用域链的末端，也就是全局上下文的变量对象。如果整条作用域链中都找不到，就报告一个错误。</p>
+<p>有两种特殊情况： try-catch语句中的catch块和with语句能够在作用域链头额外添加一个变量对象。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">with</span><span class="params">(location)</span></span> &#123;</div><div class="line">  ... <span class="comment">//这个地方可以访问location中的所有属性和方法</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于执行上下文、变量对象和作用域链之间的关系，可以由下面的例子和图进行表示：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scope = <span class="string">"global"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">CheckScope</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">var</span> scope = <span class="string">"local"</span>;</div><div class="line">    <span class="keyword">return</span> scope;</div><div class="line">&#125;</div><div class="line">CheckScope();     <span class="comment">//结果为local</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1846966-415de0df2377e436.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><em>例子来源：<a href="http://www.jianshu.com/p/181da2b57eb2" target="_blank" rel="external">bruce_zhou的简书</a></em></p>
+<h1 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h1><p>JavaScript中普遍使用两种垃圾回收机制：</p>
+<ul>
+<li><strong>标记清除</strong> 主动回收机制。首先为所有变量打上标记，接着去掉当前环境中的标记以及被当前环境中的变量引用的变量的标记，然后把所有打着标记的变量回收。</li>
+<li><strong>引用计数</strong> 被动回收机制。跟踪每个值被引用的次数，当一个变量被引用次数为0时就将其回收。但是引用计数容易造成 <strong>循环引用</strong> 的问题，例如在IE中使用一个COM对象（Component Object Model，将在之后的BOM和DOM部分进行介绍）。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;参数传递&lt;/code&gt;    &lt;code&gt;值传递&lt;/code&gt;    &lt;code&gt;引用传递&lt;/code&gt;    &lt;code&gt;作用域&lt;/code&gt;    &lt;code&gt;作用域链&lt;/code&gt;    &lt;code&gt;函数声明&lt;/code&gt;    &lt;code&gt;函数表达式&lt;/code&gt;    &lt;code&gt;变量提升&lt;/code&gt;    &lt;code&gt;执行上下文&lt;/code&gt;    &lt;code&gt;变量对象&lt;/code&gt;    &lt;code&gt;活动对象&lt;/code&gt;    &lt;code&gt;函数调用栈&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第四章和部分第七章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="作用域" scheme="http://hanfeilin.com/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
+    
+      <category term="参数传递" scheme="http://hanfeilin.com/tags/%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"/>
+    
+      <category term="垃圾回收" scheme="http://hanfeilin.com/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>原型链和寄生组合继承</title>
+    <link href="http://hanfeilin.com/2017/07/31/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-8/"/>
+    <id>http://hanfeilin.com/2017/07/31/读书笔记-JS高级-8/</id>
+    <published>2017-08-01T01:04:34.000Z</published>
+    <updated>2017-08-01T14:51:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>继承</code>    <code>原型链</code>    <code>组合继承</code>    <code>原型式继承</code>    <code>寄生式继承</code>    <code>寄生组合继承</code>    <code>对应「JavaScript高级程序设计」中部分第六章</code></p>
+<a id="more"></a>
+<hr>
+<p>上一篇博文讲到了原型，这一篇博文在此基础上分析原型链。顾名思义，原型链就是像链条一样环环相扣的原型继承方式，通过原型链和构造函数继承，我们得到了组合继承。原型式继承是对原型链继承方式的封装，寄生式继承是模拟工厂模式的继承方式，而寄生组合继承是组合继承的升级版，被开发人员成为最完美的继承方式。</p>
+<h1 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h1><p>假设我们有一个构造函数Foo，由它实例化了一个对象f，f的<em>proto</em>属性将指向Foo.prototype。这时，如果我们将Foo.prototype设为另一个构造函数Foooo()的实例，当我们在f中查新一个方法时，假设查找不到就在Foo.prototype中查找，再查找不到就在它的构造函数Foooo()的原型中查找，这样就形成了一个三层结构的原型链。<br>对于最上层的Foooo，它的构造函数是Object，因此Object作为所有原型链的顶端。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Foooo() = <span class="function"><span class="keyword">function</span></span>&#123;      <span class="comment">//Foooo的构造函数</span></div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> Foo() = <span class="function"><span class="keyword">function</span></span>&#123;         <span class="comment">//Foo的构造函数</span></div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">Foo.prototype = <span class="keyword">new</span> Foooo();  <span class="comment">//Foo的原型等于Foooo的一个实例</span></div><div class="line">f = <span class="keyword">new</span> Foo();</div></pre></td></tr></table></figure>
+<p>通过以上代码构建出了一条f -&gt; Foo -&gt; Foooo -&gt; Object的原型链，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-8-1.jpg" alt=""></p>
+<p>虽然原型链很方便，但是它和上一篇博文提到的原型创建对象一样有一个问题，就是所有的属性和方法都是共享的。</p>
+<h1 id="原型链的一个例子"><a href="#原型链的一个例子" class="headerlink" title="原型链的一个例子"></a>原型链的一个例子</h1><p>下面代码是慕课网相关课程提供的实际应用中的一个原型链例子，在DOM中做查询操作：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Elem</span>(<span class="params">id</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.elem = <span class="built_in">document</span>.getElementById(id);     <span class="comment">//找到id为输入参数的元素</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">Elem.prototype.html = <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> elem = <span class="keyword">this</span>.elem;</div><div class="line">  <span class="keyword">if</span>(val) &#123;                                    <span class="comment">//如果传入了参数，把elem内部的html换成参数</span></div><div class="line">    elem.innerHTML = val;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;                               <span class="comment">//方便链式操作</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> elem.innerHTML;                     <span class="comment">//否则返回elem内部的html代码</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Elem.prototype.on = <span class="function"><span class="keyword">function</span> (<span class="params">type, fn</span>)</span>&#123;       <span class="comment">//绑定一个事件监听器</span></div><div class="line">  <span class="keyword">var</span> elem = <span class="keyword">this</span>.elem;</div><div class="line">  elem.addEventListener(type, fn);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> div1 = <span class="keyword">new</span> Elem(<span class="string">'div1'</span>);</div><div class="line"><span class="built_in">console</span>.log(div1.html());</div><div class="line"></div><div class="line">div1.html(<span class="string">'&lt;p&gt;hello&lt;/p&gt;'</span>);</div><div class="line">div1.on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="string">'click'</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>这段代码只有div1 -&gt; Elem -&gt; Object三层，并且Object层还是隐式的，因此我不知道算不算真正意义上的原型链。不过确实是原型继承在实际应用中的一个好例子。</p>
+<h1 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h1><p>原型式继承又是那个很牛逼的道格拉斯·克罗克福德提出来的，其本质是：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span><span class="params">(o)</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span><span class="params">()</span> </span>&#123;&#125;;     <span class="comment">//创建一个临时的构造函数</span></div><div class="line">    F.prototype = o;  </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();      <span class="comment">//返回它的实例</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> protoo = &#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = object(protoo);</div></pre></td></tr></table></figure></p>
+<p>实际上就是我们把原型链中构造函数和原型链接的过程封装了起来。ECMAScript5定义了 <em>Object.create()</em> 方法来标准化这一过程。 这个方法有两个参数，第一个参数就是上述代码中的o，第二个参数是实例新增的属性。</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> inst = Object.create(o, &#123;</div><div class="line">  <span class="built_in">attr</span> :&#123;</div><div class="line">    <span class="built_in">value</span>: <span class="string">"attr"</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h1 id="构造函数继承"><a href="#构造函数继承" class="headerlink" title="构造函数继承"></a>构造函数继承</h1><p>构造函数继承使用 <em>call()</em> 或 <em>apply()</em> 函数进行：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foooo</span><span class="params">(attr)</span></span>&#123;</div><div class="line">  <span class="keyword">this</span>.attr = attr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span><span class="params">()</span></span>&#123;</div><div class="line">  Foooo.call(<span class="keyword">this</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = <span class="keyword">new</span> Foo(<span class="string">"attr"</span>);</div></pre></td></tr></table></figure></p>
+<p>使用构造函数的优势是实例可以向祖先类中传递参数。不过，它的缺点和上一篇博文中的构造函数创建对象模式相同，就是无法做到复用祖先类中的方法。</p>
+<h1 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h1><p>组合继承（combination inheritance），又叫伪经典继承，组合了原型继承和构造函数继承的优点，参考上一篇博文中的组合模式。这是JavaScript中最常用的集成模式，并且instanceof和 <em>isPropertyOf()</em> 都能识别出正确的实例类型。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foooo</span><span class="params">(args)</span> </span>&#123;</div><div class="line">  <span class="keyword">this</span>.attr = args;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Foooo.prototype.funA = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>.attr);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span><span class="params">(args)</span></span>&#123;                   <span class="comment">//通过构造函数继承属性</span></div><div class="line">  Foooo.call(<span class="keyword">this</span>, args);</div><div class="line">&#125;</div><div class="line"></div><div class="line">Foo.prototype = <span class="keyword">new</span> Foooo();          <span class="comment">//通过原型链继承方法</span></div><div class="line">Foo.prototype.constructor = Foo;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = <span class="keyword">new</span> Foo(<span class="string">"attr"</span>);</div></pre></td></tr></table></figure></p>
+<p>这么做，就可以把属性和方法的继承区分开来了。不过，这种方式有一个问题，当调用 <em>Foo()</em> 构造函数时，我们实际上调用了一次 <em>Foooo()</em> 构造函数，而Foo在进行原型继承的时候又通过new调用了一次 <em>Foooo()</em> 构造函数。这样Foo.prototype中其实包含了Foooo构造函数中的属性（如attr），但这些属性是永远访问不到的，因为当我们在inst中查找attr属性的时候，我们首先查找的是实例内部是否包含这些属性。由于属性是通过构造函数继承的，所以我们一定能找到attr属性，而不需要通过Foo的原型。</p>
+<h1 id="寄生继承"><a href="#寄生继承" class="headerlink" title="寄生继承"></a>寄生继承</h1><p>这种方式和原型式继承以及寄生模式创建对象相类似：创建一个用于封装继承过程的函数，在函数内部以某种方式增强对象，最后再将这个对象返回。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObject</span><span class="params">(args)</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> <span class="keyword">clone</span> = object(args);        <span class="comment">//这里的object函数就是原型式继承中的object函数</span></div><div class="line">  <span class="keyword">clone</span>.fun = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">clone</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> protoo = &#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = createObject(protoo);</div></pre></td></tr></table></figure></p>
+<p>这种方式的问题和构造函数类似，每新建一个实例就产生一个新的fun函数，造成内存空间利用率底下。</p>
+<h1 id="寄生组合继承"><a href="#寄生组合继承" class="headerlink" title="寄生组合继承"></a>寄生组合继承</h1><p>寄生组合继承是所有继承方式中的压轴Boss，被认为是最理想的继承方式。它基于组合继承，只不过prototype内部不再存在冗余属性。这点是如何做到的呢？还记得组合继承里我们是通过这个方式继承原型链的：<br><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">Foo</span>.proto<span class="keyword">type</span> = new <span class="type">Foooo</span>();</div></pre></td></tr></table></figure></p>
+<p>正是这句该死的代码造成了Foo.prototype的属性冗余，因为它包含了Foooo构造函数中的属性，而这些属性由于构造函数继承的存在永远不会被访问。改进思路就是让Foo.prototype只包含Foooo.prototype中的属性，而不包含Foooo构造函数中的属性。因此我们可以新建一个原型拷贝函数：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="title">inheritPrototype</span>(subType, superType)&#123;</div><div class="line">  var prototype = object(superType.prototype);</div><div class="line">  prototype.constructor = <span class="keyword">subType</span>;</div><div class="line">  <span class="keyword">subType</span>.prototype = prototype;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这个函数手动创建了subType的原型，其中object函数和前文原型式继承中的object函数是一样的。首先新建一个prototype实例，它是superType.prototype的一个实例，因此它继承了superType.prototype中所有的属性和方法。再将这个实例的constructor属性指向subType，并将subType的prototype属性指向它，就完成了一次从superType到subType的深拷贝。</p>
+<p>之后，我们把上面那句该死的代码改成：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">inheritPrototype(<span class="name">Foo</span>, Foooo)<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>就可以了。这样Foo.prototype中就不再包含Foooo构造函数的attr属性，最大限度地节省了时间和空间开销。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;继承&lt;/code&gt;    &lt;code&gt;原型链&lt;/code&gt;    &lt;code&gt;组合继承&lt;/code&gt;    &lt;code&gt;原型式继承&lt;/code&gt;    &lt;code&gt;寄生式继承&lt;/code&gt;    &lt;code&gt;寄生组合继承&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第六章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="继承" scheme="http://hanfeilin.com/tags/%E7%BB%A7%E6%89%BF/"/>
+    
+      <category term="原型" scheme="http://hanfeilin.com/tags/%E5%8E%9F%E5%9E%8B/"/>
+    
+      <category term="面向对象" scheme="http://hanfeilin.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>对象的创建方法——构造函数和原型模式</title>
+    <link href="http://hanfeilin.com/2017/07/31/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-7/"/>
+    <id>http://hanfeilin.com/2017/07/31/读书笔记-JS高级-7/</id>
+    <published>2017-07-31T20:04:34.000Z</published>
+    <updated>2017-08-01T12:37:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>对象</code>    <code>构造函数</code>    <code>创建对象</code>    <code>工厂模式</code>    <code>原型模式</code>    <code>组合模式</code>    <code>动态原型模式</code>    <code>寄生继承</code>    <code>稳妥模式</code>    <code>对应「JavaScript高级程序设计」中部分第六章</code></p>
+<a id="more"></a>
+<hr>
+<p>JavaScript中没有类和接口的概念，但它又是一门面向对象的语言，有自己的继承和派生方法。学习这些方法之前，首先要了解创建对象的基本概念。从发展历程上看，最早人们使用工厂模式来创建对象，之后发展到构造函数模式，最后原型模式。之后，由构造函数和原型组合而得到了组合模式，将组合模式进行进一步封装得到了动态原型模式，将工厂模式的函数变成构造函数得到了寄生模式，为了安全起见又创建了稳妥模式。</p>
+<h1 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h1><p>工厂模式这个词指是一种设计模式，抽象了创建具体对象的过程。</p>
+<blockquote>
+<p><strong>设计模式：</strong> 这是软件工程领域的一个概念，表明开发人员用一种标准的方法去解决一类问题。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">而在这里，工厂模式指的是如下代码的创建对象方式，这是最早的创建对象方法，也是后文将提到的寄生模式和稳妥模式的基础。</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObject1</span>(<span class="params">arg</span>)</span>&#123;   <span class="comment">//叫Object1是为了和Object区分开来</span></div><div class="line">  <span class="keyword">var</span> o = <span class="keyword">new</span> <span class="built_in">Object</span>();</div><div class="line">  o.att = arg;</div><div class="line">  o.fun = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.att);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> o;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = createObject1(extrArg);</div></pre></td></tr></table></figure>
+<p>从以上代码可以看出，创建对象的语句和给对象添加属性方法的语句被封装在了一个叫 <em>createObject1()</em> 的函数里。这么做的好处在于每次新建一个对象实例的时候，不用重复敲打 <em>var inst = new Object();</em> 这行代码。但是这个方法有个严重的缺陷，就是使用instanceof无法查询到正确的对象类型。</p>
+<blockquote>
+<p><em>instanceof的工作方式</em>     例如我们执行instanceof f这一条语句，其实系统做了以下两个步骤： 1.首先查找f的<em>proto</em>，看它对应了哪个构造函数的prototype 2.如果找不到，再试着判断它是否对应Object的prototype。来源于慕课网相关课程。</p>
+</blockquote>
+<p>因此，我们使用instanceof inst的时候，实际上返回的是Object。</p>
+<h1 id="构造函数模式"><a href="#构造函数模式" class="headerlink" title="构造函数模式"></a>构造函数模式</h1><p>构造函数模式解决了instanceof的问题。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object2</span><span class="params">(arg)</span></span>&#123;</div><div class="line">  o.att = arg;</div><div class="line">  o.fun = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.att);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = <span class="keyword">new</span> Object2(extrArg);</div></pre></td></tr></table></figure>
+<p>注意到和工厂模式不同的地方在于： ⑴new被放到了实例化的时候 ⑵函数没有返回值。这么做的好处在于使用instanceof inst时，能够正确返回Object2。对于实例inst而言，它有一个叫做constructor的属性，这个属性指向了它的构造函数Object2。</p>
+<p>然而，构造函数模式也有自己的不足。我们假设要创建Object2对象的多个实例，每当创建一个实例的时候，构造函数Object2都会new一个新的fun函数出来（记得我们之前说过 <em>fun = function(){}</em> 是 <em>new function()</em> 的语法糖）。这些实例的 <em>fun()</em> 函数的代码是相同的，却占用了不同的空间，这样非常耗费资源。</p>
+<p>尽管我们可以通过把 <em>new fun()</em> 放到构造函数的外面，也就是全局作用域中来避免这个问题，然而这样做不符合一般的编程规范。试想，如果有很多很多的对象的方法，它们就得遍布全局作用域，不仅代码混乱，还会让其它不是这些对象实例的东西访问到这些方法。因此，我们需要一个更高级的方式对方法进行继承。</p>
+<h1 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h1><p>原型模式的思路是使用指针指向所有实例共享的属性和方法，以此避免构造函数的空间浪费问题。JavaScript规定每一个引用对象都包含两个属性，prototype（也叫显示原型）属性和<em>proto</em>（也叫隐式原型）属性。并且，每个对象的<em>proto</em>属性，都指向这个对象的构造函数的prototype属性（记得函数也是一个对象）。每个对象的prototype实际上也是一个对象，它拥有一个叫做constructor的属性指向它所对应的构造函数。</p>
+<h2 id="直接创建原型"><a href="#直接创建原型" class="headerlink" title="直接创建原型"></a>直接创建原型</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object3</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">Object3.prototype.attrA = <span class="string">"attrA"</span>;</div><div class="line">Object3.prototype.funA = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>.attrA);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst1 = <span class="keyword">new</span> Object3();</div><div class="line">inst1.funA();                  <span class="comment">//"attrA"</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> inst2 = <span class="keyword">new</span> Object3();</div><div class="line">inst2.funA();                  <span class="comment">//"attrA"</span></div></pre></td></tr></table></figure>
+<p>在这段代码中，Object3是一个构造函数，它包含一个显示原型属性Object3.prototype，我们显示地对这个属性指向的对象添加一个属性attrA和一个方法funA。然后，inst1和inst2作为构造函数Object3的实例，它们包含隐式原型属性<em>proto</em>，指向的是Object3.prototype。这一关系可以由下图表示：</p>
+<p><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-7-1.jpg" alt=""></p>
+<p>而JavaScript中还做了另外一个规定，当访问一个实例的某个属性或方法时，首先在这个实例中查找，找不到就到这个实例的<em>proto</em>所指向的地方继续查找，也就是到它的构造函数的prototype中查找。因此，在这个例子中，由于构造函数内部没有定义 <em>funA()</em> 这个方法，所以inst1和inst2内部没有 <em>funA()</em> 。我们得在这两个实例的<em>proto</em>中继续查找，在它所指向的Object3的prototype中，我们找到了这个 <em>funA()</em> 这个方法并执行。</p>
+<p>这个例子还有一点需要注意，那就是this指代的是谁。我们之前说过，this指的对象的作用域，我们按照之前说的原型规则来看一遍。当执行了 <em>var inst1 = new Object3();</em> 这句话时，这个new出来的Object3中的this实际上就是inst1。而我们执行funA函数的时候，由于是通过指针的形式链接到该函数上的，所以this其实还是inst1。然而，在inst1中找不到attrA这个属性，所以我们到它的<em>proto</em>里，即Object3.prototype去找attrA。此时发现找到了，就把这个属性继承下来，于是输出的就是attrA。</p>
+<p>为了验证这个想法是否正确，我们可以在Object3构造函数中添加一个同名属性attrA:<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object3</span><span class="params">()</span></span>&#123;</div><div class="line">  attrA = <span class="string">"attrB"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样当inst1被创建的时候，它本身就拥有了attrA这个属性，这个属性的值是attrB，因此此时代码执行结果输出的是attrB。</p>
+<h2 id="通过字面量创建原型"><a href="#通过字面量创建原型" class="headerlink" title="通过字面量创建原型"></a>通过字面量创建原型</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object3</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">Object3.prototype = &#123;</div><div class="line">  attrA = <span class="string">"attrA"</span>;</div><div class="line">  funA = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.attrA);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过字面量创建原型可以少打一点代码，比如我们不用再为每个属性和方法都敲打一遍Object3.prototype。但是通过这样的定义之后，Object3.prototype相当于是我们手动新建的一个对象，prototype中自带的constructor属性没了。因此我们还需要在字面量里手动加上constructor这个属性：<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">constructor</span>:</span> Object3,</div></pre></td></tr></table></figure></p>
+<p>不过，由于JavaScript规定手动创建的属性的Enumerable值为true，而constructor的Enumerable的值应该为false，因此我们可以用后文将会介绍的 <em>defineProperty()</em> 函数手动将其设置为true。</p>
+<blockquote>
+<p>Enumerable是属性的特性，表示能否通过for-in循环访问这个属性。其它属性的特性还包括Configurable（能否通过delet删除属性、能否修改属性的特性以及能否将数据属性变成访问器属性）、Writable（能否修改属性的值）、Value（包含属性的数据值）。</p>
+</blockquote>
+<p>这种通过字面量创建原型的方法又称为重写原型对象，它的问题在于如果重写过程之前有一个实例已经通过这个原型的构造函数新建了出来，重写原型对象后这个实例的<em>proto</em>仍然指向原来的原型对象而不是这个新的原型对象。这是因为原型对象本身是一个对象，是通过地址访问的，实例的<em>proto</em>属性指向的是原来原型对象所在空间的地址，而重写原型对象相当于开辟的一块新的空间，并不会改变实例和原本远行对象的连接。</p>
+<p>原型模式存在的问题是所有实例共享原型对象内的属性和方法，因为当一个实例改变某个引用类型的属性时，改变的实际上是这个原型对象内的属性的值，因此其它实例访问这个属性的时候也会得到修改后的值（基本类型不可改，所以不存在这个问题）。这样一来，实例就无法维护自己的引用类型的属性了。</p>
+<h1 id="组合使用构造函数和原型的模式"><a href="#组合使用构造函数和原型的模式" class="headerlink" title="组合使用构造函数和原型的模式"></a>组合使用构造函数和原型的模式</h1><p>构造函数模式的问题在于每个实例的共享属性和方法独占一个空间，造成空间浪费。原型模式的问题在于没办法维护实例的非共享属性。因此，可以把这两种模式结合起来，共享属性和方法的继承通过原型实现，而非共享属性通过构造函数来实现。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function Object4(arg1, arg2) &#123;</div><div class="line">  <span class="keyword">this</span>.attrA = arg1;</div><div class="line">  <span class="keyword">this</span>.attrB = [arg1, arg2];</div><div class="line">&#125;</div><div class="line"></div><div class="line">Object4.prototype = &#123;</div><div class="line">  <span class="keyword">constructor</span>: Object4,</div><div class="line">  <span class="function"><span class="keyword">fun</span>: <span class="title">function</span><span class="params">()</span></span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.attrA);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst1 = new Object4(<span class="number">1</span>, <span class="number">2</span>);</div><div class="line"><span class="keyword">var</span> inst2 = new Object4(<span class="number">3</span>, <span class="number">4</span>);</div><div class="line">alert(inst1.attrA === inst2.attrA); <span class="comment">//false</span></div><div class="line">alert(inst1.attrB === inst2.attrB); <span class="comment">//false</span></div><div class="line">alert(inst1.<span class="keyword">fun</span> === inst2.<span class="keyword">fun</span>); <span class="comment">//true</span></div></pre></td></tr></table></figure>
+<h1 id="其它创建对象的模式"><a href="#其它创建对象的模式" class="headerlink" title="其它创建对象的模式"></a>其它创建对象的模式</h1><p>除了以上几种方式之外，还有下面这些可以用来创建对象的模式。理解这些模式对后面理解原型链有很大的房租。</p>
+<ul>
+<li><p><strong>动态原型模式</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object5</span>(<span class="params">arg</span>)</span>&#123;</div><div class="line">  <span class="keyword">this</span>.attr = arg;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.fun != <span class="string">"function"</span>)&#123;</div><div class="line">    <span class="built_in">Object</span>.prototype.fun = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      alert(<span class="keyword">this</span>.attr);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码在构造函数第一次被调用的时候会执行if语句内部的内容，为它的prototype创建一个名为fun的函数。之后的每次调用，由于fun函数已经存在了，因此if语句不会执行。这样写的好处在于将原型继承封装在构造函数内部实现，不过之后我们不能使用原型字面量来重写原型，否则已有的实例和新原型无法链接。</p>
+</li>
+<li><p><strong>寄生(parasitic)构造函数模式</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object6</span>(<span class="params">arg</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> o = <span class="keyword">new</span> <span class="built_in">Object</span>();</div><div class="line">  o.attr = arg;</div><div class="line">  o.fun = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.attr);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> o;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = <span class="keyword">new</span> Object6(<span class="string">"attr"</span>);</div></pre></td></tr></table></figure>
+<p>这种方式和工厂模式很像，所不同的是Object6此时是一个构造函数，实例需要用new来新建。它的好处在于如果我们想创建一个具有特殊属性或者方法的内置引用类型对象，例如创建一个包含新属性的数组，可以通过这种方法来实现。和工厂模式相同的是instanceof在寄生模式下也无法返回正确的值。</p>
+</li>
+<li><p><strong>稳妥构造函数模式</strong></p>
+<blockquote>
+<p><strong>稳妥对象(durable object)</strong> 的概念由道格拉斯·克罗克福德发明，指的是没有公共属性，而且其方法也不引用this的对象。</p>
+</blockquote>
+<p>在一些对安全性有较高需求的环境下可以使用稳妥构造函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object7</span>(<span class="params">arg</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> o = <span class="keyword">new</span> <span class="built_in">Object</span>();</div><div class="line">  attr = arg;            <span class="comment">//注意不要写o.attr = arg，否则inst.attr就能访问到它</span></div><div class="line">  o.fun = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    alert(attr);         <span class="comment">//注意不要写this.attr = "..."，否则inst就可以通过fun修改它</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> o;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> inst = Object7(<span class="string">"attr"</span>);</div></pre></td></tr></table></figure>
+<p>这种方式其实就是方法不使用this，以及私有变量不挂在返回的对象上的工厂模式（书上的例子少了一行变得很难理解）。除了调用fun函数，没有其它任何方法可以在外部访问对象的attr属性。</p>
+</li>
+</ul>
+<h1 id="几个和对象属性和原型有关的函数"><a href="#几个和对象属性和原型有关的函数" class="headerlink" title="几个和对象属性和原型有关的函数"></a>几个和对象属性和原型有关的函数</h1><ul>
+<li><em>某个prototype.isPrototypeOf(某个实例)</em> 返回布尔值，表示某个原型是否是某个实例的构造函数的原型</li>
+<li><em>Object.getPrototypeOf(某个实例)</em> 返回某个实例的原型</li>
+<li><em>某个实例.hasOwnProperty(某个属性)</em> 返回布尔值，表示某个属性是否属于某个实例自己（属于原型则返回false）</li>
+<li><em>for (var prop in 某个对象)</em> 循环遍历某个对象（包括从原型中访问到的）存在的可枚举属性</li>
+<li><em>Object.keys(某个对象)</em> 返回这个对象（不属于原型）存在的可枚举属性组成的数组</li>
+<li><em>Object.getOwnPropertyNames(某个对象)</em> 返回某个对象的所有属性</li>
+<li><em>Object.defineProperty(某个对象, 某个属性, 属性特性的字面量)</em> 定义某个对象的某个属性的特性</li>
+</ul>
+<p>由于篇幅关系，关于继承和原型链的部分放到下一篇博客中整理。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;对象&lt;/code&gt;    &lt;code&gt;构造函数&lt;/code&gt;    &lt;code&gt;创建对象&lt;/code&gt;    &lt;code&gt;工厂模式&lt;/code&gt;    &lt;code&gt;原型模式&lt;/code&gt;    &lt;code&gt;组合模式&lt;/code&gt;    &lt;code&gt;动态原型模式&lt;/code&gt;    &lt;code&gt;寄生继承&lt;/code&gt;    &lt;code&gt;稳妥模式&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第六章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="原型" scheme="http://hanfeilin.com/tags/%E5%8E%9F%E5%9E%8B/"/>
+    
+      <category term="面向对象" scheme="http://hanfeilin.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+      <category term="工厂模式" scheme="http://hanfeilin.com/tags/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="构造函数" scheme="http://hanfeilin.com/tags/%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript中的typeof和强制类型转换</title>
+    <link href="http://hanfeilin.com/2017/07/30/typeof%E5%92%8C%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/"/>
+    <id>http://hanfeilin.com/2017/07/30/typeof和强制类型转换/</id>
+    <published>2017-07-30T16:06:59.000Z</published>
+    <updated>2017-08-01T08:58:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>typeof的用法</code>    <code>强制类型转换</code>    <code>&quot;==&quot; 和 &quot;===&quot;</code></p>
+<a id="more"></a>
+<hr>
+<p>这一部分整理了JavaScript中关于typeof和强制类型转换的一些注意点，内容来源于慕课网的相关课程。</p>
+<h1 id="typeof操作符"><a href="#typeof操作符" class="headerlink" title="typeof操作符"></a>typeof操作符</h1><p>typeof是一个操作符而不是函数，可以通过下面两种语法进行使用：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">typeof a;</div><div class="line">typeof(a);</div></pre></td></tr></table></figure>
+<p>typeof操作符对于基础类型和引用类型的操作结果不同，关于基础类型和引用类型的区别请参照「JavaScript高级程序设计」 读书笔记系列的第⑶到第⑹篇。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">typeof</span> <span class="literal">undefined</span>         <span class="comment">// undefined</span></div><div class="line"><span class="keyword">typeof</span> <span class="string">'abc'</span>             <span class="comment">// string</span></div><div class="line"><span class="keyword">typeof</span> <span class="number">123</span>               <span class="comment">// number</span></div><div class="line"><span class="keyword">typeof</span> <span class="literal">true</span>              <span class="comment">// boolean</span></div><div class="line"><span class="keyword">type</span> of &#123;&#125; / [] / <span class="literal">null</span>   <span class="comment">// object</span></div><div class="line"> <span class="keyword">type</span> <span class="built_in">console</span>.log         <span class="comment">// function</span></div></pre></td></tr></table></figure>
+<p>对于未经初始化的变量和声明过未赋值的变量，typeof都会返回undefined值。而基础类型除了Null之外，typeof都会返回它们对应的类型。引用类型的操作结果分为两种，所有的函数返回function，其它引用类型返回object。Null是一个特例，尽管它是基础类型，却返回Object。特别需要注意的是，诸如String、Number和Boolean这样的基础包装类型（关于基础包装类型的细节，参见<a href="http://www.hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-6/" target="_blank" rel="external">「JavaScript高级程序设计」 读书笔记⑹</a><br>返回的是Object。</p>
+<h1 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h1><p>JavaScript在以下场景中会执行强制类型转换操作：</p>
+<ul>
+<li><p><strong>字符串拼接</strong></p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var a = <span class="number">100</span> + <span class="number">10</span> ;   <span class="comment">//110</span></div><div class="line">var b = <span class="number">100</span> + '<span class="number">10</span>';  <span class="comment">//'10010'</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>双等于”==”</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">100</span> == <span class="string">'100'</span>;        //<span class="literal">true</span></div><div class="line"><span class="attr">0</span> == <span class="string">' '</span>;            //<span class="literal">true</span></div><div class="line"><span class="attr">null</span> == undefined;   //<span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>“==”会将操作数强制转换成布尔值进行比较，所以如果要进行严格的比较，请用”===”。</p>
+</li>
+<li><p><strong>if语句</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">b</span> = <span class="number">100</span></div><div class="line"><span class="keyword">if</span> (b) &#123;</div><div class="line">  ...               <span class="comment">//会运行</span></div><div class="line">&#125;</div><div class="line"><span class="selector-tag">var</span> c = <span class="string">' '</span></div><div class="line"><span class="function"><span class="title">if</span><span class="params">(c)</span></span>&#123;</div><div class="line">  ...               <span class="comment">//不会运行</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样是强制将参数转换为布尔值。</p>
+</li>
+<li><p><strong>逻辑运算符</strong></p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">10</span> &amp;&amp; <span class="number">0</span>);       <span class="regexp">//</span><span class="number">0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">' '</span> || <span class="string">'abc'</span>);  <span class="regexp">//</span><span class="string">'abc'</span></div><div class="line"><span class="built_in">console</span>.log(!<span class="built_in">window</span>.abc);   <span class="regexp">//</span> <span class="literal">true</span>， <span class="built_in">window</span>.abc是<span class="literal">undefined</span></div></pre></td></tr></table></figure>
+<p>判断一个变量会被转化为 true 还是 false的方法，只需要：</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var a = <span class="number">100</span>;</div><div class="line">console.log(!!a);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="“-”-和-“-”的区别"><a href="#“-”-和-“-”的区别" class="headerlink" title="“==” 和 “===”的区别"></a>“==” 和 “===”的区别</h1><p>上文提到过，”==”会将左右操作数强制转换为布尔值进行比较。下图展现了这两者的区别。</p>
+<p><img src="https://raw.githubusercontent.com/ForestCold/image/master/typeof.png" alt=""></p>
+<ul>
+<li>红色：===</li>
+<li>橙色：==</li>
+<li>黄色：&lt;= 和 &gt;= 同时成立，== 不成立</li>
+<li>蓝色：只有 &gt;=</li>
+<li>绿色：只有 &lt;=</li>
+</ul>
+<p>图片来源于<a href="https://www.zhihu.com/question/31442029" target="_blank" rel="external">Belleve的知乎回答</a>。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;typeof的用法&lt;/code&gt;    &lt;code&gt;强制类型转换&lt;/code&gt;    &lt;code&gt;&amp;quot;==&amp;quot; 和 &amp;quot;===&amp;quot;&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="JavaScript小知识" scheme="http://hanfeilin.com/categories/JavaScript%E5%B0%8F%E7%9F%A5%E8%AF%86/"/>
+    
+      <category term="数据类型" scheme="http://hanfeilin.com/categories/JavaScript%E5%B0%8F%E7%9F%A5%E8%AF%86/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    
+    
+      <category term="typeof" scheme="http://hanfeilin.com/tags/typeof/"/>
+    
+      <category term="强制类型转换" scheme="http://hanfeilin.com/tags/%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>引用类型中的Date，RegExp，基本包装类型和单体内置对象</title>
+    <link href="http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-6/"/>
+    <id>http://hanfeilin.com/2017/07/29/读书笔记-JS高级-6/</id>
+    <published>2017-07-30T01:06:59.000Z</published>
+    <updated>2017-08-01T12:27:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>复杂类型</code>    <code>引用类型</code>    <code>日期Date</code>    <code>正则表达式RegExp</code>    <code>基本包装类型</code>    <code>String</code>    <code>Boolean</code>    <code>Number</code>    <code>单体内置对象</code>    <code>对应「JavaScript高级程序设计」中部分第四章和第五章</code></p>
+<a id="more"></a>
+<hr>
+<p>接着上一篇笔记中提到的的对象Object、数组Array和函数Function，这篇笔记开始分析日期Date、正则表达式RegExp和其它一些复杂数据类型。</p>
+<h1 id="Date"><a href="#Date" class="headerlink" title="Date"></a><strong>Date</strong></h1><p>Date数据类型在前端的编写中非常常用，所以一定要理解它的内涵。Date数据类型保存的实际上是从1970年1月1日零时开始所经历的毫秒数，后台的计算过程也是将日期转化为毫秒数进行计算。构造一个Date对象和之前构造Object或Array对象类似：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> <span class="type">Date</span>() <span class="comment">//参数为空时自动传入当前时间（打这行代码的时间，不是执行这行代码的时间）</span></div></pre></td></tr></table></figure></p>
+<p>其中，参数要求传入的是毫秒数，而不是其它时间格式。将其它时间格式转换为毫秒数有两种方法： <em>Date.parse()</em> 和 <em>Date.UTC()</em> 。前者的输入参数为一个表示时间的字符串，接收以下几种格式：</p>
+<ul>
+<li><strong>月/日/年</strong>, 如3/31/1994</li>
+<li><strong>英文月名 日， 年</strong>, 如March 31, 1994</li>
+<li><strong>英文星期 英文月名 日 年 时：分：秒 时区</strong>, 如Thur March 31 1994 13:52:00 GMT+0800</li>
+<li><strong>YYYY-MM-DDTHH：mm:ss.sssZ</strong>, 如1994-03-31T13:52:00</li>
+</ul>
+<p>而 <em>Date.UTC()</em> 接收的参数分别是年份，基于0的月份，天数，小时数（0到23），分钟数，秒及毫秒。<br>获得执行某行代码时的时间，可以用 <em>Date.new()</em> 函数，注意和构造函数相区别：<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var <span class="built_in">time</span> = <span class="built_in">Date</span>.now();</div><div class="line">var <span class="built_in">time</span> = +<span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="comment">//在不支持Date.now()函数的浏览器中可以替代使用</span></div></pre></td></tr></table></figure></p>
+<p><em>Date.now()</em> 可以用来计算某个函数的执行时间，代码很简单就不写了。<br>要将毫秒数转换为字符串格式，可以用每个对象都有的 <em>toString()</em> 和 <em>toLocaleString()</em> 函数，它们在转换时间上的效果基本相同。</p>
+<blockquote>
+<p>要注意的是 <em>valueOf()</em> 函数返回的是时间的毫秒数，因此可以用来比较两个时间的大小。</p>
+</blockquote>
+<p>除了 <em>toString()</em> 和 <em>toLocaleString()</em> 两个函数之外， Date还提供了其它一系列函数来按照不同的格式将毫秒数转化为字符串，包括 <em>toDateString()</em>，<em>toTimeString()</em>，<em>toLocaleDateString()</em>，<em>toLocaleTimeString()</em> 和 <em>toUTCString()</em>。这些方法的输出因浏览器而异，所以这里没法给出统一的表格，要用的时候可以自己试试需要什么样的格式。<br>除此之外，Date还提供其它一些方法让用户方便地对时间进行操作，篇幅关系这里不一一列举，请参照<a href="http://www.w3school.com.cn/jsref/jsref_obj_date.asp" target="_blank" rel="external">W3CSchool上对于Date的说明</a>。</p>
+<h1 id="RegExp"><a href="#RegExp" class="headerlink" title="RegExp"></a><strong>RegExp</strong></h1><p>在了解RegExp类型之前，首先需要了解<code>正则表达式</code>。</p>
+<blockquote>
+<p><strong>正则表达式</strong> 通常被用来检索或替换符合某个规则的文本。在编写编译器的词法分析器部分时，我们也需要用到正则表达式。常见的正则表达式元字符、量词等参见<a href="https://www.w3cschool.cn/regexp/zoxa1pq7.html" target="_blank" rel="external">W3CSchool上对于正则表达式的说明</a>。</p>
+</blockquote>
+<p>JavaScript中的正则表达式有两种写法，分别是字面量方法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 其中/[bc]a/部分被称作pattern，代表正则表达式，i被称作flags，代表标志位。标志位包含g（表示全局模式）、i（表示不区分大小写）和m（表示多行模式）三种模式。*/</span></div><div class="line"><span class="keyword">var</span> expression = <span class="regexp">/[bc]at/i</span>;</div></pre></td></tr></table></figure></p>
+<p>以及本部分阐述的使用RegExp构造函数的方法：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* RegExp的两个参数分别对应字面量表示法的pattern和flags */</span></div><div class="line"><span class="keyword">var</span> expression = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"[bc]at"</span>, <span class="string">"i"</span>);</div></pre></td></tr></table></figure></p>
+<p>以上两句话构造出来的正则表达式是相同的，不同的地方在于以下两点：</p>
+<ul>
+<li>RegExp传入的正则表达式参数如果包含元字符，需要进行双重转义，而字面量模式只要转义一次。例如，<code>/\[bc\]at/</code> 的字面量模式，作为 <em>RegExp()</em> 的参数时，需要转义成 <code>&quot;\\[bc\\]at&quot;</code> 。</li>
+<li><p>字面量模式构造的正则表达式始终共享一个RegExp实例，而RegExp构造函数每次创建的实例都是一个新的实例。书上给了一个”catastrophe”的例子，：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> re = <span class="literal">null</span>;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">  re = <span class="regexp">/cat/g</span>;</div><div class="line">  re.test(<span class="string">"catastrophe"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">  re = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"cat"</span>, <span class="string">"g"</span>);</div><div class="line">  re.test(<span class="string">"catastrophe"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>书上描述的是在第一个循环体中，第一次循环能够打印出true， 而第二次循环是从第一次找到的字符末尾开始往后查询的，所以结果为false。第三次又从头查询，结果又为true……而在第二个循环中，每次打印的结果都为true，因为每次re都是一个新建的对象，都从头开始进行查询。然而我发现这个例子在chrome55.0上运行的结果并不像书中说的那样，查阅资料得知:</p>
+<blockquote>
+<p>在ECMAScript 5中规定：使用正则表达式字面量跟使用RegExp构造函数一样，每次调用都创建新的实例。所以两个循环在现代浏览器中都弹出true。</p>
+</blockquote>
+<p>所以实际上在支持ECMAScript5的浏览器中，两个循环输出都是true。怎么才能达到书中作者所描述的效果呢？我们可以更改一下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> re = <span class="literal">null</span>,</div><div class="line">    result = <span class="literal">null</span>;</div><div class="line"></div><div class="line">re = <span class="regexp">/cat/g</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">  result = re.test(<span class="string">"catastrophe"</span>);</div><div class="line">  <span class="built_in">console</span>.log([result, re.lastIndex]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个例子在chrome55.0中的运行结果如下图所示：<br><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-5-1.png" alt=""><br>从这个结果中可以看出，由于re只有一个实例，因此在奇数次循环中都是从第0位开始查询，找到第一个”cat”即”catastrophe”的前三个字母，返回true，此时的lastIndex属性为3。而偶数次循环都是从lastIndex属性 + 1向后查询，直到”catastrophe”的末尾都没有单词”cat”出现，所以返回false，此时lastIndex又更新为了0，代表又回到了”catastrophe”单词的头部。</p>
+</li>
+</ul>
+<p>RegExp主要包含 <em>exec()</em> 和 <em>test()</em> 两个常用函数。</p>
+<ul>
+<li><p><em>exec()</em> 函数专门为捕获组而设计。其接受一个字符串参数，返回一个数组，包含index和input两个额外属性。其中index表示项在字符串中的位置，input表示应用正则表达式的字符串(就是exec的输入参数)。</p>
+<blockquote>
+<p><strong>什么是捕获组？</strong> 在正则表达式中，可以进行“分组”，用一对圆弧括号括起来的表达式(a)就是一个分组。将这样的分组保存下来，可以方便后续的操作。有了捕获组就有非捕获组，在左括号后面加上?:所构成的表达式(?:a)为非捕获组，即不能被捕获输出。</p>
+</blockquote>
+<p><em>exec()</em> 返回的数组的第0项表示与模式匹配的字符串，之后的每一项表示一个匹配组。请看以下例子：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> text = <span class="string">"mom and dad and baby"</span>;</div><div class="line"><span class="built_in">var</span> pattern = /mom( <span class="keyword">and</span> dad( <span class="keyword">and</span> baby)?)?/gi;</div><div class="line"><span class="built_in">var</span> matches = pattern.exec(text);</div><div class="line"></div><div class="line">console.<span class="built_in">log</span>(matches.index); //<span class="number">0</span></div><div class="line">console.<span class="built_in">log</span>(matches.input); //<span class="string">"mom and dad and baby"</span></div><div class="line">console.<span class="built_in">log</span>(matches); //[<span class="string">"mom and dad and baby"</span>, <span class="string">"and dad and baby"</span>, <span class="string">"and baby"</span>]</div></pre></td></tr></table></figure>
+<p>这个例子中，text字符串包含两个被圆括号括起来的捕获组，分别是”and dad and baby”和”and baby”。因此 <em>exec()</em> 函数返回的数组中第二项和第三项分别存放了这两个捕获组。而数组第一项存放的是和这个模式所匹配的第一个字符串。<br>当设置全局模式g时，正则表达式的lastIndex属性会被更新，意味着每次都从上一次的检测结尾开始检测。而当不设置全局模式时，lastIndex属性始终为0，意味着每次都从头开始检测。</p>
+<blockquote>
+<p><strong>lastIndex属性：</strong> 这是正则表达式模式的一个属性，和被检测的字符串无关，表示下一次开始检测的位置。如果某一次检测到字符串结尾仍旧没有匹配项，那么将其更新为0。对于不设置g模式的正则表达式而言，这个属性没有意义。除了lastIndex属性之外，正则表达式还包含其它一些记录匹配信息的属性，详细内容请见<a href="http://www.w3school.com.cn/jsref/jsref_obj_regexp.asp" target="_blank" rel="external">W3CSchool对正则表达式的介绍</a>（第四版书上的很多属性现在都没有了，还是以w3cschool的属性为准）。</p>
+</blockquote>
+</li>
+<li><p><em>test()</em> 接受一个字符串参数，模式与该参数匹配返回true，否则返回false。这个函数相对而言比较简单，这里不贴代码。<br>另外，<em>toLocaleString()</em> 和 <em>toString()</em> 方法都返回正则表达式的字面量，而 <em>valueOf()</em> 则返回其本身。</p>
+</li>
+</ul>
+<h1 id="基本包装类型"><a href="#基本包装类型" class="headerlink" title="基本包装类型"></a><strong>基本包装类型</strong></h1><blockquote>
+<p>基本包装类型是一种特殊的引用类型，同时也具有和基本类型相对应的特殊行为。JavaScript中的基本包装类型包括Boolean，Number和String。每当读取一个基本类型时，后台都会创建一个基本包装类型，因此基本类型能够使用基本包装类型的方法。建议永远不要使用new去显示地创建基本包装类型，因为会引起混乱，让别人不知道你到底想建个基本类型还是对象。</p>
+</blockquote>
+<ul>
+<li><p><strong>基本包装类型和基本类型有什么区别？</strong><br>基本类型也可以使用基本包装类型的方法，并且在被读取时会自动生成一个基本包装类型。然而，使用typeof测试基本类型时返回的是对应的基本类型，测试基本包装类型的时候返回的是Object。并且，所有基本包装类型的对象在转换为布尔值时都为true。另外，基本类型不能添加自定义属性，基本包装类型由于属于引用类型，所以可以添加自定义属性。</p>
+</li>
+<li><p><strong>基本包装类型和普通的引用类型有什么区别？</strong><br>书上的描述是引用类型和基本包装类型的主要区别在于对象的生存期，然而我觉得这个描述并不准确。这里的基本包装类型指的是在读取基本类型时自动创建的基本包装类型，而不是我们显示地new出来的基本包装类型。对于显示new出来的基本包装类型，实际上对象的生存期和引用类型并没有区别。而对于自动创建的基本包装类型，其实代码表现还是基本类型，所以对象在执行的瞬间被销毁。</p>
+</li>
+</ul>
+<h2 id="Boolean类型"><a href="#Boolean类型" class="headerlink" title="Boolean类型"></a><strong>Boolean类型</strong></h2><p>  理论上永远不要使用Boolean类型，原因在于它被转换为布尔值时永远为true，这样就丧失了它原本的逻辑意义。</p>
+<h2 id="Number类型"><a href="#Number类型" class="headerlink" title="Number类型"></a><strong>Number类型</strong></h2><p>  Number类型包含三个和精度有关的方法，分别是 <em>toFixed()</em>（显示几位小数，注意当数字是基本类型的时候是不能原处更改的），<em>toExponential()</em>（以指数形式表示）和 <em>toPrecision()</em> （参数表示不包括指数部分的位数，后台会自动调用最合适的函数）。</p>
+<h2 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h2><p>  String类型和Array类型有不少相似的属性和方法。String类型也有表示长度的length属性、用作拼接的 <em>concate()</em> 方法（普遍用+代替）、获取下标的方括号方法（也可以用等价的 <em>charAt()</em> 函数或者返回字符编码的 <em>charCodeAt()</em> 函数，<em>fromCharCode()</em> 函数的过程相反：将一连串的字符编码作为输入，返回对应的字符串）、获取子字符串的 <em>slice()</em> 方法（<em>subString()</em> 方法和它很像，只不过在处理负数参数时 <em>subString()</em> 会将负数转为0。另一个和它类似的方法是 <em>subStr()</em> 方法，它的第二个参数为要截取的字符串长度， 并且在遇到负数参数时会将第一个负参数加上字符串长度，第二个负参数转换为0）、查找子字符串的 <em>indexOf()</em> 和 <em>lastIndexOf()</em> 方法。 以上这些方法的具体细节请参照我上一篇博客<a href="http://www.hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-5/" target="_blank" rel="external">「JavaScript高级程序设计」 读书笔记⑸</a>的内容。</p>
+<p>  除此之外， String类型还包含能够将头尾的空格都去掉的 <em>trim()</em> 方法、进行大小写转换的 <em>toLowerCase()</em> 和 <em>toUpperCase()</em> 方法，用来进行比较的 <em>localeCompare()</em> 方法（返回0代表相等，正数代表字符串参数排在调用者前面，负数反之）。</p>
+<p>  在String中，有几个方法专门用来进行模式匹配。<em>text.match(pattern)</em> 实质上和 <em>pattern.exec(text)</em> 是相对应的，返回值也相同。<em>search(pattern)</em> 方法可以返回字符串中第一个匹配项的索引。</p>
+<p>  比较复杂的是 <em>replace()</em> 方法，它可以替换符合条件的子字符串。<em>replace()</em> 方法有两个参数，第一个参数是字符串或正则表达式，如果是字符串那么只替换第一个找到的子串，要替换所有符合条件的子串，需要将参数设置为模式为g（全局）的正则表达式。第二个参数可以是要替换成的字符串或一个函数，这个函数提供更加精确的替换法则，如下所示：<br>  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*HTML代码中对&lt;&gt;"&amp;这四个符号的转义*/</span></div><div class="line"><span class="function"><span class="keyword">Function</span> <span class="title">htmlEscape</span><span class="params">(text)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> text.replace(/[&lt;&gt;*&amp;]/g, <span class="function"><span class="keyword">function</span><span class="params">(match, pos, originalText)</span>)</span>&#123; <span class="comment">//function的三个参数分别是模式的匹配项、匹配项的位置和原始字符串</span></div><div class="line">    <span class="keyword">switch</span>(match) &#123;</div><div class="line">      <span class="keyword">case</span> <span class="string">"&lt;"</span> :</div><div class="line">        <span class="keyword">return</span> <span class="string">"&amp;lt"</span>;</div><div class="line">      <span class="keyword">case</span> <span class="string">"&gt;"</span> :</div><div class="line">        <span class="keyword">return</span> <span class="string">"&amp;gt"</span>;</div><div class="line">      <span class="keyword">case</span> <span class="string">"&amp;"</span> :</div><div class="line">        <span class="keyword">return</span> <span class="string">"&amp;amp"</span>;</div><div class="line">      <span class="keyword">case</span> <span class="string">"\""</span>:</div><div class="line">        <span class="keyword">return</span> <span class="string">"&amp;quot"</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  最后也是我们最常用的是String的 <em>split()</em> 方法，用来将字符串按照某种规则分割，并返回包含所有分割项的数组。 <em>split()</em> 方法可以使用字符串或正则表达式作为输入。</p>
+<h1 id="单体内置对象"><a href="#单体内置对象" class="headerlink" title="单体内置对象"></a><strong>单体内置对象</strong></h1><blockquote>
+<p><strong>单体内置对象</strong> 是由ECMAScript实现提供的、不依赖与宿主环境的对象，这些对象在ECMAScript程序执行之前就已经存在了。</p>
+</blockquote>
+<p>JavaScript中的单体内置对象包括Globe对象和Math对象。Globe对象正如它的名字而言，是个全局对象。JavaScript中没有全局变量或全局函数概念，因此所有看起来像是全局变量或全局函数的东西全部都是Globe对象的属性和方法。我们常说的window对象实际上实现了Globe对象的功能，但它还包含很多其它功能和任务，可以说Globe对象是window对象的一个部分。我们不能直接访问Globe对象，但我们可以直接访问window对象。</p>
+<p>ECMAScript中最强大的一个方法 <em>eval()</em> 能够将参数解析为ECMAScript脚本来执行，尽管强大，但是尽量不要随意使用它，否则容易遭遇恶意用户的代码注入。</p>
+<p>Math对象中的技巧主要包含两点。首先是求一个数组的最大或最小值，可以使用如下代码：<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> <span class="built_in">max</span> = Math.<span class="built_in">max</span>.<span class="built_in">apply</span>(Math, <span class="built_in">array</span>);</div></pre></td></tr></table></figure></p>
+<p>还记得我们在<a href="http://www.hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-4/" target="_blank" rel="external">「JavaScript高级程序设计」 读书笔记⑷</a>中提到的 <em>apply()</em> 方法吗？这个方法接收两个参数，第一个参数为函数的作用域，第二个参数为一个参数数组。因此这么编写代码巧妙地将数组传入了 <em>max()</em> 函数中。如果直接使用 <em>Math.max(array)</em> ，则会返回NaN的结果。</p>
+<p>第二个技巧在于求一组范围内的随机数，在编写可视化项目时，这个方法对于颜色的选择十分有用。假设我们要从lowerValue和upperValue之间选取一个随机数，那么我们可以编写如下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">selectFrom</span>(<span class="params">lowerValue, upperValue</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> choices = upperValue - lowerValue;</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * choices + lowerValue);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其中， <em>Math.floor()</em> 表示向下取整，对应的还有 <em>Math.ceil()</em> 表示向上取整，<em>Math.round()</em> 表示四舍五入。而 <em>Math.random()</em> 表示在0和1之间选取一个随机数。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;复杂类型&lt;/code&gt;    &lt;code&gt;引用类型&lt;/code&gt;    &lt;code&gt;日期Date&lt;/code&gt;    &lt;code&gt;正则表达式RegExp&lt;/code&gt;    &lt;code&gt;基本包装类型&lt;/code&gt;    &lt;code&gt;String&lt;/code&gt;    &lt;code&gt;Boolean&lt;/code&gt;    &lt;code&gt;Number&lt;/code&gt;    &lt;code&gt;单体内置对象&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第四章和第五章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="数据类型" scheme="http://hanfeilin.com/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="引用类型" scheme="http://hanfeilin.com/tags/%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="正则表达式" scheme="http://hanfeilin.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
+    
+      <category term="基本包装类型" scheme="http://hanfeilin.com/tags/%E5%9F%BA%E6%9C%AC%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>引用类型中的数组</title>
+    <link href="http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-5/"/>
+    <id>http://hanfeilin.com/2017/07/29/读书笔记-JS高级-5/</id>
+    <published>2017-07-29T19:07:00.000Z</published>
+    <updated>2017-08-01T12:27:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>复杂类型</code>    <code>引用类型</code>    <code>数组Array</code>    <code>对应「JavaScript高级程序设计」中部分第五章</code></p>
+<a id="more"></a>
+<hr>
+<p>还记得上一篇读书笔记整理的是关于对象Object和函数Array的相关知识吗？ 本篇笔记接着介绍另一个常用的引用类型————数组Array。数组类型包含非常多的属性和方法，因此单独开辟了一篇笔记来进行讲解。</p>
+<h1 id="Array"><a href="#Array" class="headerlink" title="Array"></a><strong>Array</strong></h1><p>  ECMAScript中数组的每一项都可以保存任何类型的数据，并且大小可以动态调整。</p>
+<h2 id="定义数组"><a href="#定义数组" class="headerlink" title="定义数组"></a><strong>定义数组</strong></h2><p>  数组的创建方法和Object非常类似，第一种是通过构造函数来创建：<br>  <figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = <span class="keyword">new</span> Array();</div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = <span class="keyword">new</span> Array(<span class="number">3</span>);</div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = <span class="keyword">new</span> Array(<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>);</div><div class="line"><span class="comment">//new 操作符也可以被省略</span></div></pre></td></tr></table></figure></p>
+<p>  以上代码都很简单，这里不赘述。另一种方法是通过字面量来构建：<br>  <figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = [<span class="number">1</span>, <span class="number">2</span>, ]; <span class="comment">//IE8以下版本会生成一个长度为3的数组，且第三个元素为undefined。其它浏览器生成只包含元素1和2的长度为2的数组。</span></div><div class="line"><span class="keyword">var</span> <span class="keyword">value</span> = [, , ,]; <span class="comment">//IE8以下版本会生成一个长度为4的数组，其它浏览器生成长度为3的数组。</span></div></pre></td></tr></table></figure></p>
+<h2 id="索引数组"><a href="#索引数组" class="headerlink" title="索引数组"></a><strong>索引数组</strong></h2><p>  JavaScript中的数组不会向上越界，如果索引中的值超过了数组的长度，则数组自动更新长度为索引值+1。如以下代码所示：<br>  <figure class="highlight rsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>, <span class="number">2</span>];</div><div class="line">console.<span class="built_in">log</span>(arr.<span class="built_in">length</span>); <span class="comment">//2</span></div><div class="line">arr[<span class="number">5</span>] = <span class="string">'9'</span>;</div><div class="line">console.<span class="built_in">log</span>(arr.<span class="built_in">length</span>); <span class="comment">//6，其中第3到第5项的值为undefined</span></div></pre></td></tr></table></figure></p>
+<p>  数组的length属性不是只读的，因此可以通过改变length的值增加或移除数组末尾的项。如：<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>, <span class="number">2</span>];</div><div class="line">arr.length = <span class="number">1</span>;</div><div class="line">console.log(arr[<span class="number">1</span>]); <span class="comment">//undefined</span></div></pre></td></tr></table></figure></p>
+<h2 id="检测数组"><a href="#检测数组" class="headerlink" title="检测数组"></a><strong>检测数组</strong></h2><p>  使用instanceof操作符能够方便地检测某个对象是不是数组：<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(value <span class="keyword">instanceof</span> <span class="built_in">Array</span>)</div><div class="line">   ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  但是如果网页中包含多个框架，拥有多个Array构造函数，instanceof的使用会引起混乱。因此我们可以使用新增的 <em>Array.isArray()</em> 方法：<br>  <figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value))&#123;</div><div class="line">  <span class="params">...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="转换数组"><a href="#转换数组" class="headerlink" title="转换数组"></a><strong>转换数组</strong></h2><p>  每个对象都有 <em>.toLocaleString()</em>（返回对象的字符串表示，该字符串与执行环境的地区相对应）、<em>.toString()</em>(返回对象的字符串表示)和 <em>.valueOf()</em> (返回对象的字符串、数字或布尔值表示，通常与 <em>toString()</em> 返回的值相同)三个方法。数组的每一项会被用逗号隔开，组成一个字符串。</p>
+<blockquote>
+<p><em>alert()</em> 函数会在后台调用 <em>toString()</em> 方法，所以打印出的是数组每一项用逗号隔开的值，而不是数组的地址。</p>
+</blockquote>
+<p>  对于数组而言，需要注意的是 <em>toLocaleString()</em> 方法调用的是数组每一项的toLocaleString方法，而 <em>toString()</em> 方法调用的则是数组每一项的toString方法。<br>  <em>.join()</em> 方法可以更改数组项之间的分割方法（例如用”|”代替”,”进行分割）。</p>
+<blockquote>
+<p>null项和undefined项在以上方法的返回结果中以空字符串表示。</p>
+</blockquote>
+<h2 id="栈方法"><a href="#栈方法" class="headerlink" title="栈方法"></a><strong>栈方法</strong></h2><p>  数组提供了 <em>push()</em> 和 <em>pop()</em> 方法来模拟栈的行为。别问我栈是什么→_→。其中，<em>.push()</em> 方法可以有很多参数，一次放在数组末尾，其返回值为修改后的数组长度。</p>
+<h2 id="队列方法"><a href="#队列方法" class="headerlink" title="队列方法"></a><strong>队列方法</strong></h2><p>  队列沿用了栈的 <em>push()</em> 方法，向数组末尾添加元素。<em>.shift()</em> 方法可以移除数组中的第一个项并返回，同时数组长度减一。另外，数组还包含一个 <em>unshift()</em> 方法，和 <em>shift()</em> 方法相反，它向队列前端添加任意元素并返回修改后的数组长度。<br>  因此，使用 <em>push()</em>+<em>shift()</em> 的组合或 <em>pop()</em>+<em>unshift()</em> 的组合可以从头尾两端模拟队列。</p>
+<h2 id="重排序方法"><a href="#重排序方法" class="headerlink" title="重排序方法"></a><strong>重排序方法</strong></h2><p>  数组中的 <em>.reverse()</em> 会反转数组，<em>.sort()</em> 方法按照升序对数组进行排序。需要特别注意的是，<em>sort()</em> 方法调用的是数组中每一项的 <em>toString()</em> 方法，因此实质上是对字符串类型的排序。<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>];</div><div class="line">arr.sort();</div><div class="line">console.log(arr);<span class="comment">//[0, 1, 10, 15, 5];</span></div></pre></td></tr></table></figure></p>
+<p>  这个例子中，为什么调用 <em>sort()</em> 方法之后顺序反而不对了呢？因为对于字符串”10”和字符串”5”而言，首先比较的是第一位的ASCII码，因为”1”是小于”5”的，所以”10”被排在了”5”的前面。因此，我们应该通过向 <em>sort()</em> 加入参数来定义它的排序方式。<em>sort()</em> 参数是一个比较函数，可以如下定义：<br>  <figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 升序比较函数 */</span></div><div class="line">Function compare(<span class="keyword">value</span><span class="number">1</span>, <span class="keyword">value</span><span class="number">2</span>) &#123;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &lt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &gt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  对于数值类型或者 <em>valueOf()</em> 的返回值为数值类型的函数，比较函数的写法更为方便：<br>  <figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Function</span> <span class="title">compare</span> (value1, value2)&#123;</div><div class="line">  <span class="keyword">return</span> <span class="type">value1</span> - value2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a><strong>操作方法</strong></h2><p>  <em>.concat()</em> 方法，参数为值或数组（也可以是值和数组混合），返回当前数组的副本，并在该副本后面连接上参数中的值或数组。<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line">var b = a.concat(<span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]);</div><div class="line">console.log(b); <span class="comment">// [1, 2, 3, 4, 5, 6]</span></div></pre></td></tr></table></figure></p>
+<p>  <em>.slice(start, end)</em> 方法，如果只有start参数，则返回从start到数组结尾的副本。如果包含end参数，则返回从start到end-1的数组副本。如果start &lt; end，返回一个空数组。如果start或end为负数，则加上数组长度直到值变为正数为止。<br>  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line">var b = a.slice(<span class="number">-5</span>, <span class="number">-1</span>);</div><div class="line">console.log(b) <span class="comment">// [2], 因为a.length = 3, -5 + 3 + 3 = 1, -1 + 3 = 2, 从第1位到第2 - 1位进行截取</span></div></pre></td></tr></table></figure></p>
+<p>  <em>.splice()</em> 这一方法可以删除、插入或替换数组中的任意项，并且返回被删除的所有项：<br>  <figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> colors = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</div><div class="line"></div><div class="line"><span class="comment">/* 删除某几项，需要两个参数： 要删除的第一项位置和要删除的项数 */</span></div><div class="line"><span class="built_in">var</span> removed = colors.<span class="built_in">splice</span>(<span class="number">0</span>, <span class="number">1</span>); //删除第一项</div><div class="line">console.<span class="built_in">log</span>(colors); //[<span class="string">"green"</span>, <span class="string">"blue"</span>]</div><div class="line">console.<span class="built_in">log</span>(removed); //[<span class="string">"red"</span>]</div><div class="line"></div><div class="line"><span class="comment">/* 插入某几项，需要三个参数：起始位置、0（删除的项数）和要插入的项 */</span></div><div class="line"><span class="built_in">var</span> inserted = colors.<span class="built_in">splice</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="string">"yellow"</span>);//在第一项上插入</div><div class="line">console.<span class="built_in">log</span>(colors); //[<span class="string">"red"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</div><div class="line">console.<span class="built_in">log</span>(inserted); //[]</div><div class="line"></div><div class="line"><span class="comment">/* 替换某几项，需要三个参数：起始位置、要删除的项数和要插入的项 */</span></div><div class="line"><span class="built_in">var</span> replaced = colors.<span class="built_in">splice</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="string">"yellow"</span>);</div><div class="line">console.<span class="built_in">log</span>(colors); //[<span class="string">"red"</span>, <span class="string">"yellow"</span>, <span class="string">"blue"</span>];</div></pre></td></tr></table></figure></p>
+<h2 id="位置方法"><a href="#位置方法" class="headerlink" title="位置方法"></a><strong>位置方法</strong></h2><p>  <em>.indexOf()</em> 从前往后查找数组，lastIndexOf()从后往前查找数组，都返回要查找的项在数组中的第一个被查找到的位置。当找不到时返回-1。这两个函数都有两个参数，分别是待查找的项和查找起始点。</p>
+<h2 id="迭代方法"><a href="#迭代方法" class="headerlink" title="迭代方法"></a><strong>迭代方法</strong></h2><p>  数组共有五个迭代方法，分别是 <em>every()</em>，<em>filter()</em>，<em>forEach()</em>，<em>map()</em>，和 <em>some()</em>。每个方法都有两个参数，分别是要在每项上运行的函数和运行该函数的作用域对象（第二个参数影响this的值，我们在后面学习原型的时候再详细讨论，现在先把第二个参数忽略）。对于第一个参数中的函数，它本身又有三个参数，分别是某项、该项的位置和数组本身。<br>  先来看最简单的 <em>every()</em> 和 <em>some()</em> 两个函数：<br>  <figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</div><div class="line">/* 当每项都返回<span class="literal">true</span>时，<span class="keyword">every</span>()返回<span class="literal">true</span> */</div><div class="line">var everyResult = arr.<span class="keyword">every</span>(<span class="keyword">function</span>(<span class="literal">item</span>, index, <span class="keyword">array</span>)&#123;</div><div class="line">  return item &gt; <span class="number">2</span>;</div><div class="line">&#125;)</div><div class="line">console.log(everyResult); //<span class="literal">false</span></div><div class="line"></div><div class="line">/* 当至少一项都返回<span class="literal">true</span>时，<span class="keyword">some</span>()返回<span class="literal">true</span> */</div><div class="line">var someResult = arr.<span class="keyword">some</span>(<span class="keyword">function</span>(<span class="literal">item</span>, index, <span class="keyword">array</span>)&#123;</div><div class="line">  return item &gt; <span class="number">2</span>;</div><div class="line">&#125;)</div><div class="line">console.log(someResult); //<span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<p>  <em>filter()</em> 返回所有符合要求的项组成的数组：<br>  <figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> filterResult = arr.filter(<span class="function"><span class="keyword">function</span><span class="params">(item, <span class="keyword">index</span>, <span class="keyword">array</span>)</span><span class="comment">&#123;</span></span></div><div class="line">  return item &gt; 2;</div><div class="line">&#125;)</div><div class="line"><span class="title">console</span>.<span class="title">log</span><span class="params">(filterResult)</span>; <span class="comment">//[3, 4]</span></div></pre></td></tr></table></figure></p>
+<p>  <em>map()</em> 返回的也是一个数组，是对每一项进行操作后取得的新的项组成的数组：<br>  <figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mapResult = arr.map(<span class="function"><span class="keyword">function</span><span class="params">(item, <span class="keyword">index</span>, <span class="keyword">array</span>)</span><span class="comment">&#123;</span></span></div><div class="line">  return item * 2;</div><div class="line">&#125;)</div><div class="line"><span class="title">console</span>.<span class="title">log</span><span class="params">(mapResult)</span>; <span class="comment">//[2, 4, 6, 8]</span></div></pre></td></tr></table></figure></p>
+<p>  <em>forEach()</em> 函数没有返回值，就相当于对数组每一项进行了一个for循环操作。</p>
+<h2 id="归并方法"><a href="#归并方法" class="headerlink" title="归并方法"></a><strong>归并方法</strong></h2><p>  归并方法的语法和迭代方法有些类似，都是通过遍历数组的项来执行某些操作。JavaScript提供 <em>reduce()</em> 和 <em>reduceRight()</em> 两种归并方法，分别从左到右和从右到左进行归并。包含两个参数：在每一项上调用的函数和作为归并基础的初始值。其中调用函数又包含四个参数：前一个值，当前值，项的索引和数组对象。以下代码可以返回一个数组所有项的和：<br>  <figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// prev最开始是第一项，即1，cur最开始是第二项，即2</span></div><div class="line"><span class="keyword">var</span> reduceResult = arr.reduce(<span class="function"><span class="keyword">function</span><span class="params">(prev, cur, <span class="keyword">index</span>, <span class="keyword">array</span>)</span><span class="comment">&#123;</span></span></div><div class="line">  return prev + cur;</div><div class="line">&#125;)</div><div class="line"><span class="title">console</span>.<span class="title">log</span><span class="params">(reduceResult)</span>; <span class="comment">//10</span></div></pre></td></tr></table></figure></p>
+<p>在下一篇读书笔记中，将介绍剩余的一些引用类型。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;复杂类型&lt;/code&gt;    &lt;code&gt;引用类型&lt;/code&gt;    &lt;code&gt;数组Array&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第五章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="数据类型" scheme="http://hanfeilin.com/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="引用类型" scheme="http://hanfeilin.com/tags/%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="数组" scheme="http://hanfeilin.com/tags/%E6%95%B0%E7%BB%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>引用类型中的对象和函数</title>
+    <link href="http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-4/"/>
+    <id>http://hanfeilin.com/2017/07/29/读书笔记-JS高级-4/</id>
+    <published>2017-07-29T19:06:59.000Z</published>
+    <updated>2017-08-01T12:27:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>复杂类型</code>    <code>引用类型</code>    <code>对象Object</code>    <code>函数Function</code>    <code>对应「JavaScript高级程序设计」中部分第四章和部分第五章</code></p>
+<a id="more"></a>
+<hr>
+<p>上一篇读书笔记谈到了基本数据类型，本篇笔记接着上一篇的思路，重点介绍最常用的两个个复杂数据类型，即对象Object和函数Function，对应本书中第四章的变量部分以及第五章的对象和函数部分。</p>
+<h1 id="复杂数据类型"><a href="#复杂数据类型" class="headerlink" title="复杂数据类型"></a>复杂数据类型</h1><p>复杂数据类型又称为引用类型，引用类型在内存中存储的是对象地址，请看以下代码：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = &#123;name: <span class="string">'a'</span>&#125;</div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">b</span> = a</div></pre></td></tr></table></figure></p>
+<p>a和b的存储方式如下图所示：<br><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-3-2.jpg" alt=""></p>
+<p>其中，引用类型的地址存储在大小固定的栈内存中，引用类型的内容存储在大小可变的堆类型中。因此，引用类型的值是按照引用访问的。要特别注意的是，很多语言中String是通过引用进行访问的，而JavaScript中String被归类为了基础数据类型。<br>除了访问方式的不同之外，引用类型可以随时扩展属性（不仅仅是对象，就连数组或者函数这样的引用类型也可以），而基础类型则不行。</p>
+<p>更多关于类型存储的知识比较请参照<a href="https://zhuanlan.zhihu.com/p/22400319" target="_blank" rel="external">方应杭的知乎文章</a>。</p>
+<blockquote>
+<p><strong>对象的定义：</strong> 对象是某个特定的引用类型的实例。引用类型和类的概念很像，但二者并不一样，不要混淆。</p>
+</blockquote>
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a><strong>Object</strong></h2><p>  对象类型是最基本的引用类型，也是最好理解的引用类型，其它所有引用类型都从对象中继承了基本行为。因此我们从对象类型开始说起。</p>
+<h3 id="定义对象"><a href="#定义对象" class="headerlink" title="定义对象"></a><strong>定义对象</strong></h3><p>  定义对象有两种方式，第一种方式是通过构造函数来定义：<br>  <figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="built_in">Object</span>();</div><div class="line">person.name = <span class="string">"Magic Yummy"</span>;</div></pre></td></tr></table></figure></p>
+<p>  另一种方式是通过<code>对象字面量</code>来表示：<br>  <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var person</span> = &#123;</div><div class="line">  name : <span class="string">"Magic Yummy"</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>  这两种方法定义出的对象person是等价的。实际上，第一种方法还拥有其语法糖（第三种方法）：<br>  <figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var <span class="attr">person</span> = &#123;&#125;;</div><div class="line">person.<span class="attr">name</span> = <span class="string">"Magic Yummy"</span>；</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>无论是从易读性还是性能方面而言，实际开发中都推荐采用第二种或第三种定义方法。来源于慕课网相关课程。</p>
+</blockquote>
+<p>  对于需要传入大量参数的函数，对象字面量可以用来封装这些参数。</p>
+<h3 id="访问对象"><a href="#访问对象" class="headerlink" title="访问对象"></a><strong>访问对象</strong></h3><p>  访问对象时，可以通过点表示法或方括号两种方式，如：<br>  <figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">console.<span class="built_in">log</span>(person[<span class="string">"name"</span>])   <span class="comment">// "Magic Yummy"</span></div><div class="line">console.<span class="built_in">log</span>(person.<span class="built_in">name</span>)      <span class="comment">// "Magic Yummy"</span></div></pre></td></tr></table></figure></p>
+<p>  使用方括号表示法的优点是可以通过变量来访问属性，即在方括号中书写字符串变量。另外，如果属性名中有空格，或者属性名是保留字，也可以使用方括号的写法。不过，点表示法更符合现在程序员的编程习惯，因此应该尽量使用点表示法。</p>
+<h2 id="Function"><a href="#Function" class="headerlink" title="Function"></a><strong>Function</strong></h2><p>  JavaScript中的函数与C++或JAVA中的函数有不小的区别，包含了很多巧妙的设计细节。函数部分跟包含一大堆属性方法的数组部分相比，读起来心旷神怡。</p>
+<p>  首先需要牢记的概念是，函数是一个对象，函数名是指向这个对象的指针，和这个对象本身不存在绑定关系。因此，同一个函数可以包含多个函数名，修改某个函数名使它指向新的函数对象，不会对原本被指向的那个函数对象产生任何影响。</p>
+<h3 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a><strong>定义函数</strong></h3><p>  函数可以通过<code>函数声明</code>或<code>函数表达式</code>来定义（还可以用Function构造函数来定义，不过不推荐，这里就不列出了）：<br>  <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 函数声明 */</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span> <span class="params">(num1, num2)</span></span>&#123;</div><div class="line">  <span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div><div class="line"><span class="comment">/*函数表达式*/</span></div><div class="line"><span class="keyword">var</span> sum = <span class="function"><span class="keyword">function</span><span class="params">(num1, num2)</span></span>&#123;</div><div class="line">  <span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这两种定义方式的结果没有区别。但需要注意的一点是，JavaScript的解析器在执行环境中加载数据时，会先读取函数声明，然后再执行其它任何代码。而函数表达式则没有这个待遇，它需要等到解析器执行到它所在的行，才会被解释执行。因此，如果在用函数表达式定义的函数之前调用它，会产生意外标识符的错误，而函数声明没有这个问题。</p>
+</blockquote>
+<h3 id="作为值的函数"><a href="#作为值的函数" class="headerlink" title="作为值的函数"></a><strong>作为值的函数</strong></h3><p>  一个函数可以作为其它任意函数的参数，其中一个最常用的例子就是为数组的 <em>sort()</em> 方法定义比较函数，使之根据不同的属性进行排序。可以定义如下比较函数：<br>  <figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> createComparisonFunction(prototypeName) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="keyword">object</span><span class="number">1</span>, <span class="keyword">object</span><span class="number">2</span>)&#123;</div><div class="line">    var <span class="keyword">value</span><span class="number">1</span> = <span class="keyword">object</span><span class="number">1</span>[prototypeName];</div><div class="line">    var <span class="keyword">value</span><span class="number">2</span> = <span class="keyword">object</span><span class="number">2</span>[prototypeName];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &lt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">value</span><span class="number">1</span> &gt; <span class="keyword">value</span><span class="number">2</span>)&#123;</div><div class="line">      <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    &#125;<span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  将这个函数作为 <em>sort()</em> 排序函数的输入，并且将想要排序的属性作为这个函数的输入，就可以按照某个属性对数组进行排序。</p>
+<h3 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a><strong>函数的参数</strong></h3><p>  JavaScript的函数不要求提供特定数量和类型的参数，而函数内部维护了一个叫arguments的参数数组，用来存储传入该函数的所有参数。值得注意的是，arguments的值和对应的参数存储的值不共享一个内存空间，但它们相互绑定。如以下代码：<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doAdd</span>(<span class="params">num1, num2</span>) </span>&#123;</div><div class="line">  <span class="built_in">arguments</span>[<span class="number">1</span>] = <span class="number">10</span>;</div><div class="line">  alert(<span class="built_in">arguments</span>[<span class="number">0</span>] + num2);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  在这个函数中，如果调用时输入了两个以上的参数，那么第二个参数会被设置为10，之后的所有num2也都是10而不是起始传进来的num2值。但是如果只有一个参数，那么第二个参数的值仍然是undefined，这是因为arguments不能对超出自身长度的部分进行赋值，而它的长度又是由真正的传入的参数个数决定的。<br>  另外一点需要注意的是，JavaScript函数没有<code>重载</code>。</p>
+<blockquote>
+<p>重载指的是相同的函数名拥有不同的参数类型，根据不同参数类型函数做不同的事。由于JavaScript的函数没有对参数类型进行硬性规定，因此也就不存在重载的说法。</p>
+</blockquote>
+<h3 id="callee和caller"><a href="#callee和caller" class="headerlink" title="callee和caller"></a><strong>callee和caller</strong></h3><p>  callee和caller是函数的两个内部属性。callee是arguments的属性，指的是arguments对象所在的函数。caller则是函数自身的属性，指的是调用这个函数的函数。这么命名是为了将它们进行区分。由于函数名和函数对象不是绑定关系， 因此当我们需要在函数内进行递归的时候，使用callee属性可以实现函数名与函数内容的低耦合：<br>  <figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function <span class="built_in">factorial</span>(<span class="built_in">num</span>) &#123;</div><div class="line">  <span class="keyword">if</span> (<span class="built_in">num</span> &lt;= <span class="number">1</span>)&#123;</div><div class="line">    <span class="built_in">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">return</span> <span class="built_in">num</span> * arguments.callee(<span class="built_in">num</span> - <span class="number">1</span>); //<span class="built_in">return</span> <span class="built_in">num</span> * <span class="built_in">factorial</span>(<span class="built_in">num</span> - <span class="number">1</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  例如在以上阶乘函数中，如果按照常规的写法，函数名factorial会出现在函数内容中，如果我们用另一个函数名指向这个函数对象，就得修改相应的函数内容。但是使用arguments.callee属性就不存在这个问题。而caller也是为了实现更松散的耦合，如：<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  inner();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="built_in">arguments</span>.callee.caller); <span class="comment">//alert(inner.caller);</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">outer();</div></pre></td></tr></table></figure></p>
+<p>  这段代码会在警告框中打印出outer()函数的源码。</p>
+<h3 id="this对象"><a href="#this对象" class="headerlink" title="this对象"></a><strong>this对象</strong></h3><p>  函数的this对象引用的是函数执行的环境对象，也就是调用这个函数的对象。如果这个函数是被直接执行的（相当于在全局作用域中执行），this对象引用的就是window。<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.color = <span class="string">"red"</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;<span class="attr">color</span>: <span class="string">"blue"</span>&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayColor</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>.color);</div><div class="line">&#125;</div><div class="line"></div><div class="line">sayColor();            <span class="comment">//没人调用它，this指向window，打印出的值为red</span></div><div class="line">o.sayColor = sayColor;</div><div class="line">o.sayColor();          <span class="comment">//对象o调用它，this指向o，打印出的值为blue</span></div></pre></td></tr></table></figure></p>
+<h3 id="apply-call-和bind-方法"><a href="#apply-call-和bind-方法" class="headerlink" title="apply(), call()和bind()方法"></a><strong>apply(), call()和bind()方法</strong></h3><p>  <em>apply()</em> 方法和 <em>call()</em> 方法都能够执行函数，它们的第一个参数都为函数执行的作用域。<em>apply()</em> 函数的第二个参数为参数数组，而 <em>call()</em> 函数需要把所有参数拆开放入第二个以及之后的参数中。这两个方法的用处在于可以在不同的作用域中运行同样的函数，这一点在实际编程中非常有用。<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.color = <span class="string">"red"</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;<span class="attr">color</span> : <span class="string">"blue"</span>&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayColor</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>.color);</div><div class="line">&#125;</div><div class="line"></div><div class="line">sayColor();            <span class="comment">//red</span></div><div class="line"></div><div class="line">sayColor.call(<span class="keyword">this</span>);   <span class="comment">//red</span></div><div class="line">sayColor.call(<span class="built_in">window</span>); <span class="comment">//red</span></div><div class="line">sayColor.call(o);      <span class="comment">//blue</span></div></pre></td></tr></table></figure></p>
+<p>  <em>bind()</em> 方法创建一个函数实例，它的参数作为函数作用域绑定到这个实例上。因此就算在全局变量中调用这个函数实例，返回结果仍然基于被绑定的作用域。<br>  <figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var objectSayColor = sayColor.bind(o)<span class="comment">;</span></div><div class="line">objectSayColor()<span class="comment">;      //blue</span></div></pre></td></tr></table></figure></p>
+<p>  这种方法的好处将会在很后面的高级技巧部分进行更为详细的讨论。<br>  由于引用类型数组Array的内容实在太多，篇幅关系放到下一篇读书笔记进行整理。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;复杂类型&lt;/code&gt;    &lt;code&gt;引用类型&lt;/code&gt;    &lt;code&gt;对象Object&lt;/code&gt;    &lt;code&gt;函数Function&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第四章和部分第五章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="函数" scheme="http://hanfeilin.com/tags/%E5%87%BD%E6%95%B0/"/>
+    
+      <category term="数据类型" scheme="http://hanfeilin.com/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="引用类型" scheme="http://hanfeilin.com/tags/%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="对象" scheme="http://hanfeilin.com/tags/%E5%AF%B9%E8%B1%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>数据类型分类和基本类型</title>
+    <link href="http://hanfeilin.com/2017/07/29/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-3/"/>
+    <id>http://hanfeilin.com/2017/07/29/读书笔记-JS高级-3/</id>
+    <published>2017-07-29T19:06:58.000Z</published>
+    <updated>2017-08-01T12:27:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>变量类型</code>    <code>数据类型</code>    <code>基本类型</code>    <code>值类型</code>    <code>对应「JavaScript高级程序设计」中部分第三章和部分第四章</code></p>
+<a id="more"></a>
+<hr>
+<p>「JavaScript高级程序设计」的第三章讲述的是JavaScript中最基本的语法概念，主要包括数据类型、操作符和语句三个部分。而第四章的变量部分介绍了值类型和引用类型的区别。因此这篇文章读书笔记就把第三章中的基本数据类型以及第四章变量部分介绍的基本数据类型存储方式做了整理，除此之外包含了慕课网上针对JavaScript数据类型课程的一些笔记整理。</p>
+<h1 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h1><p>JavaScript的变量是松散类型的，与C或Java等语言不同，JavaScript的变量统一用var操作符加上一个变量名来定义。需要注意的是，用var操作符定义的变量将成为定义该变量的作用域中的局部变量。当需要创建全局变量时，可以把var省略。下面来看一个书上的例子：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> message = <span class="string">"hi"</span>;</div><div class="line">&#125;</div><div class="line">test();</div><div class="line">alert(message);</div></pre></td></tr></table></figure>
+<p>这里的 <em>alert(message)</em> 语句运行时将会产生undefined的错误，因为 <em>test()</em> 函数执行之后局部变量message就被销毁了。</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span> <span class="comment">&#123;</span></span></div><div class="line">    message = "hi";</div><div class="line">&#125;</div><div class="line"><span class="title">test</span><span class="params">()</span>;</div><div class="line">alert(<span class="keyword">message</span>);</div></pre></td></tr></table></figure>
+<p>这段代码则会成功运行并弹出写有”hi”的警告框，因为此时的message是一个全局变量。尽管如此，尽量不要使用省略var的方式在局部作用域下定义全局变量。</p>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><p>JavaScript中的数据类型分为以下两个大类：</p>
+<blockquote>
+<p><strong>基本（简单）数据类型:</strong>  Undefined, Null, Boolean, Number, String<br><strong>复杂数据类型:</strong>  Object</p>
+</blockquote>
+<p>其中，基本（简单）数据类型又称为值类型。复杂数据类型又称为引用类型，具体又分为object、function、array等，但它们的本质都是对象。<em>值类型和引用类型的叫法是对于数据的存储方式而言的。</em> 关于引用类型「JavaScript高级程序设计」的作者特意花了整整一个章节来介绍，足以证明它的重要性。</p>
+<p>不过，这里我们先从基本数据类型谈起。</p>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><p>基本数据类型又称为值类型，它的存储方式非常好理解，看以下代码：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">1.23</span></div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">b</span> = a</div></pre></td></tr></table></figure>
+<p>a和b的存储方式如下图所示：<br><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-3-1.jpg" alt=""></p>
+<p>因此，当改变b的值，如将b赋值为2时，a的值并不会发生相应的更改。<br>更多关于类型存储的知识比较请参照<a href="https://zhuanlan.zhihu.com/p/22400319" target="_blank" rel="external">方应杭的知乎文章</a>。</p>
+<h2 id="undefined"><a href="#undefined" class="headerlink" title="undefined"></a><strong>undefined</strong></h2><p>  当一个以var声明的变量未经初始化时它的值就是undefined。需要注意的一点是，如果一个变量连声明都没有，那么浏览器会报错。不过，对于typeof操作符而言，无论是声明过还没初始化的变量，还是根本未经声明的变量，返回的值都是undefined。<br><figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a<span class="comment">;</span></div><div class="line">//var b<span class="comment">;</span></div><div class="line">alert(a)<span class="comment">;</span></div><div class="line">alert(b)<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>  语句 <em>alert(a)</em> 执行之后会弹出写有undefined的警告框，而语句 <em>alert(b)</em> 执行后则会报错。</p>
+<h2 id="Null"><a href="#Null" class="headerlink" title="Null"></a><strong>Null</strong></h2><p>  null值表示了一个空对象指针，用typeof操作符将会返回object。 一般而言，如果一个将要保存对象的变量还未真正保存对象，最好将它的值设置为null，这样可以直接检查变量是否为null来判断是否保存了对象，同时可以与undefined进行区分。</p>
+<h2 id="Boolean"><a href="#Boolean" class="headerlink" title="Boolean"></a><strong>Boolean</strong></h2><p>  只有true和false两个值（注意要小写），但是任意类型的值都可以通过JavaScript中的<code>内置函数</code><em>Boolean()</em> 转化为一个boolean值。””, 0, NaN, null和undefined是常见的被转换为false的值。</p>
+<blockquote>
+<p>补充知识：内置函数是一种数据封装对象，是不考虑环境，内置在JavaScript语言中的函数。<br>JavaScript中的内置函数包括： Object, Array, Boolean, Number, String, Function, Date, Regexp, Error<br><em>定义来自慕课网相关课程，不确定是否正确，之后发现不正确立即修改</em></p>
+</blockquote>
+<h2 id="Number"><a href="#Number" class="headerlink" title="Number"></a><strong>Number</strong></h2><p>  <code>进制</code>  默认十进制，八进制在数字前加0，十六进制在数字前加0x，如果碰到数字超出进制范围的情况（如08），第一个0将被自动忽略，依旧作为十进制。数字经过计算之后得到的值都为十进制。</p>
+<p>  <code>科学计数法</code> x + e/E + y，表示x * 10的y次方。例如3.125e7表示31250000。</p>
+<p>  <code>浮点数计算的误差</code> 0.1 + 0.2得到的数字并不是0.3，而是一个很接近于0.3的小数。0.15 + 0.15则能够得到0.3。这是IEEE754的锅，不关JavaScript的事。</p>
+<p>  <code>最值</code> 和JAVA中的最值不同JavaScript中的最大值用Number.MAX_VALUE表示，相应的，最小值用Number.MIN_VALUE表示。超过范围的值用Infinity（或Number.POSITIVE_INFINITY）和-Infinity(或Number.NEGATIVE_INFINITY)表示，这两个值不能参与计算。判断是否无穷，可以用 <em>isFinite()</em> 函数。</p>
+<p>  <code>NaN</code> 表示本来要返回数值的操作数未返回数值的情况，不影响其它代码的执行。 isNaN函数对将所有不能转换为数值的输入返回true, 要注意的是数值字符串（如”10”）或boolean值（如true）是可以被转换为数值的。isNaN函数同样适用于对象，首先判断对象的 <em>valueOf()</em> 返回的值，不能转化为数值的话再调用 <em>toString()</em> 再测试一次。</p>
+<p>  <code>数值转换</code> <em>Number()</em>, <em>parseInt()</em> 和 <em>parseFloat()</em> 三个函数可以进行字符串转换，它们之间的区别有些微妙，具体见下表：</p>
+<p>  <img src="https://raw.githubusercontent.com/ForestCold/image/master/du-3-3.png" alt=""></p>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a><strong>String</strong></h2><p>   String是由双引号或单引号包起来的字符串。</p>
+<p>  <code>长度</code>  通过 <em>.length()</em> 方法可以返回字符串的长度（注意如果包含双字节字符，返回的长度不一定正确）。这里复习一下，Java中返回字符串长度需要用 <em>.length()</em>，返回数组长度时才用 <em>.length</em>，不要混淆。另外，包含转义字符的字符串计算长度的时候算的是转义后的字符串长度。</p>
+<p>  <code>不可变性</code>字符串一旦被创建即不可改变。当改变一个字符串变量时实际上创建了一个新字符串赋值给变量，再将原来的字符串销毁。</p>
+<p>  <code>转换为字符串</code><em>text.toString()方</em> 法和 <em>String(text)</em> 方法可以将一个值转化为字符串。<em>toString()</em> 方法不能处理null和undefined, 不过可以传递一个参数作为进制数，就和前面提到的parseInt类似。而 <em>String()</em> 方法会将null转化为”null”，将undefined转化为”undefined”，其它与 <em>toString()</em> 方法相同，不过没有参数。</p>
+<p>由于篇幅问题，复杂数据类型（即引用数据类型）将放到下一篇读书笔记中进行介绍。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;变量类型&lt;/code&gt;    &lt;code&gt;数据类型&lt;/code&gt;    &lt;code&gt;基本类型&lt;/code&gt;    &lt;code&gt;值类型&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中部分第三章和部分第四章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="数据类型" scheme="http://hanfeilin.com/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    
+      <category term="基本类型" scheme="http://hanfeilin.com/tags/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LintCode做题整理 之 二分法</title>
+    <link href="http://hanfeilin.com/2017/07/28/LintCode-1/"/>
+    <id>http://hanfeilin.com/2017/07/28/LintCode-1/</id>
+    <published>2017-07-29T04:03:08.000Z</published>
+    <updated>2017-07-30T15:16:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>LintCode</code>    <code>算法</code>    <code>二分法</code>    </p>
+<a id="more"></a>
+<hr>
+<p>二分法，顾名思义，就是在O(1)的时间复杂度内把一个范围为n的问题变成一个范围为n/2的问题，因此它的复杂度为O(logn)。</p>
+<h1 id="二分法模板"><a href="#二分法模板" class="headerlink" title="二分法模板"></a>二分法模板</h1><p>对于最简单的二分法题目，如:</p>
+<blockquote>
+<p>在一个排序数组中找一个数，返回该数出现的任意位置，如果不存在，返回-1<a href="http://www.lintcode.com/zh-cn/problem/classical-binary-search/" target="_blank" rel="external">LintCode链接</a></p>
+</blockquote>
+<p>我们可以直接敲模板：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (start + <span class="number">1</span> &lt; <span class="keyword">end</span>)&#123;</div><div class="line">    <span class="built_in">int</span> mid = start + (<span class="keyword">end</span> - start) / <span class="number">2</span>;</div><div class="line">    <span class="keyword">if</span> (nums[mid] == <span class="keyword">target</span>)&#123;</div><div class="line">        <span class="keyword">return</span> mid;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums[mid] &lt; <span class="keyword">target</span>) &#123;</div><div class="line">        start = mid;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">end</span> = mid;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (nums[start] == <span class="keyword">target</span>)&#123;</div><div class="line">    <span class="keyword">return</span> start;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (nums[<span class="keyword">end</span>] == <span class="keyword">target</span>)&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">end</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个模板中有几个需要注意的细节：</p>
+<ul>
+<li>while循环中写成start + 1 &lt; end可以避免复杂问题中的一系列错误，增加模板通用性。如后面提到的找lastpos的问题，如果写成start &lt; end就会出现问题。具体出现什么问题在后面讨论lastpos的时候进行解释。</li>
+<li>第二行中求mid的值最好按照模板的写法，如果写成mid = (start + end) / 2， 在极端情况下会造成overflow。</li>
+<li>不要以为循环做完就万事大吉，此时如果没有返回mid，代表start = end - 1，并且start和end这两个位置还没进行过查询。所以在循环之后要补上对这两个位置的查询。</li>
+</ul>
+<h1 id="firstpos和lastpos"><a href="#firstpos和lastpos" class="headerlink" title="firstpos和lastpos"></a>firstpos和lastpos</h1><p>熟悉模板之后，我们进阶一下，来看下面两道题：</p>
+<blockquote>
+<p>1.给一个升序数组，找到target第一次出现的位置，如果没出现过返回-1<br>2.给一个升序数组，找到target最后一次出现的位置，如果没出现过返回-1 <a href="http://www.lintcode.com/problem/last-position-of-target" target="_blank" rel="external">LintCode链接</a></p>
+</blockquote>
+<p>这两道题就是最简单的firstpos和lastpos问题，我们只需要稍微修改模板即可。<br>对于firstpos问题，将模板第四行改成：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">end</span> = <span class="keyword">mid</span>;</div></pre></td></tr></table></figure></p>
+<p>因为是查找第一个出现的位置，所以当mid匹配到target时，查询目标必然是它或存在于它的前面，因此把end变成mid。<br>对于lastpos问题同理，将模板第四行改成：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">start</span> = <span class="keyword">mid</span>;</div></pre></td></tr></table></figure></p>
+<p>同时要将第12到14行和第16到18行进行对调。因为查找的是最后一个满足条件的target，所以当start = end - 1时，要先查询end的位置再查询start的位置。</p>
+<p>这里说明一下为什么要写成start &lt; end - 1。 因为整除是一个偏左运算，假设我们要在[2, X]这个数组中找到最后一个2，while中写成了start &lt; end， 此时start为0，end为1，mid = start + (end - start) / 2 = 0 + (1 - 0) / 2 = 0，在if (nums[mid] == target)这个语句中我们按照道理要写start = mid，但是这么写start的值还是0，就造成了死循环。又不能写成start = mid + 1，因为假设X不是2，我们就错过了正确的解。而start &lt; end - 1则避免了这个问题。</p>
+<p>类似的问题还有 <a href="http://www.lintcode.com/problem/first-bad-version" target="_blank" rel="external">错误代码版本</a>（firstpos问题）<br>             <a href="http://www.lintcode.com/zh-cn/problem/search-for-a-range/" target="_blank" rel="external">查找目标出现区间</a>（firstpos和lastpos的结合）<br>             <a href="http://www.lintcode.com/zh-cn/problem/total-occurrence-of-target/" target="_blank" rel="external">目标出现次数</a>（同上）</p>
+<h1 id="查找最接近的值"><a href="#查找最接近的值" class="headerlink" title="查找最接近的值"></a>查找最接近的值</h1><p>更进一步，假设我们要在数组中找到最接近target的值，如：</p>
+<blockquote>
+<p>在一个排好序的数组 A 中找到 i 使得 A[i] 最接近 target <a href="http://www.lintcode.com/zh-cn/problem/closest-number-in-sorted-array/#" target="_blank" rel="external">LintCode链接</a></p>
+</blockquote>
+<p>那么我们要将模板的第三行改成：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (Math.<span class="built_in">abs</span>(A[mid] - <span class="keyword">target</span>) &lt;= Math.<span class="built_in">abs</span>(A[mid - <span class="number">1</span>] - <span class="keyword">target</span>)</div><div class="line">    &amp;&amp; Math.<span class="built_in">abs</span>(A[mid] - <span class="keyword">target</span>) &lt;= Math.<span class="built_in">abs</span>(A[mid + <span class="number">1</span>] - <span class="keyword">target</span>))&#123;</div></pre></td></tr></table></figure></p>
+<p>这句话的意思是当target距离mid的值比它距离mid - 1和mid + 1的值都来得小的时候，mid就是要找的值。之后第12行到第18行也要进行相应的修改。</p>
+<p>类似问题还有 <a href="http://www.lintcode.com/zh-cn/problem/k-closest-numbers-in-sorted-array" target="_blank" rel="external">查找最接近target的k个数</a>（先查找到最接近的数，再用两个指针向左右扩展把k个数存入结果。）</p>
+<h1 id="在无限长度的数组中查找"><a href="#在无限长度的数组中查找" class="headerlink" title="在无限长度的数组中查找"></a>在无限长度的数组中查找</h1><p>本质和最简单的二分法没有区别，只需要先确定查找的上界。可以通过指数扩展的方法来确定，即设定一个K值，刚开始k = 1，之后每次k = k * 2，判断第K位与目标的大小。<br>类似问题 <a href="http://www.lintcode.com/zh-cn/problem/search-in-a-big-sorted-array/" target="_blank" rel="external">在大数组中查找</a></p>
+<p>其它的二分法问题都大同小异，这里就不赘述啦。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;LintCode&lt;/code&gt;    &lt;code&gt;算法&lt;/code&gt;    &lt;code&gt;二分法&lt;/code&gt;    &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="LintCode" scheme="http://hanfeilin.com/categories/LintCode/"/>
+    
+    
+      <category term="二分法" scheme="http://hanfeilin.com/tags/%E4%BA%8C%E5%88%86%E6%B3%95/"/>
+    
+      <category term="算法" scheme="http://hanfeilin.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在HTML中使用JavaScript</title>
+    <link href="http://hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-2/"/>
+    <id>http://hanfeilin.com/2017/07/28/读书笔记-JS高级-2/</id>
+    <published>2017-07-28T20:08:39.000Z</published>
+    <updated>2017-08-01T12:28:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>在HTML中使用JavaScript</code>    <code>对应「JavaScript高级程序设计」中的第二章</code></p>
+<a id="more"></a>
+<hr>
+<p>参与过Web开发的人多多少少会觉得这一章比较简单，因此这一章的篇幅不会太长。不过，在HTML中使用JavaScript还是有不少小细节值得我们注意。</p>
+<h1 id="script属性"><a href="#script属性" class="headerlink" title="script属性"></a>script属性</h1><p>在HTML4.0.1中，<code>&lt;script&gt;</code>元素包含六个属性（其中很少被用到的charset属性及已经被废弃的language属性这里不再赘述）：</p>
+<blockquote>
+<ul>
+<li><p><strong>asycn：</strong> 立即下载脚本，一旦脚本下载完之后会立即执行，但是在下载脚本的过程中不阻塞页面中其它操作。只对外部脚本文件有效。 语法为:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> = <span class="string">"async"</span> &gt;</span><span class="undefined"></span></div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>defer：</strong> 脚本可以被延迟到文档完全被解析和显示之后再执行。只对外部脚本文件有效。语法为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span>=<span class="string">"defer"</span>&gt;</span><span class="undefined"></span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>asycn和defer的用法需要我们额外注意。当运行到一个不包含async和defer属性的普通&lt;script&#62;元素时，浏览器会等待其中的js脚本执行完毕之后再渲染该&lt;script&#62;元素之后的其它文档。当&lt;script&#62;包含asycn属性时，加载js脚本和渲染后续文档将并行（异步）执行，而当&lt;script&#62;包含defer属性时，尽管加载和渲染仍然是异步进行，但js的执行却要被延迟到所有页面元素解析完成之后。另外需要注意的是，defer按照加载顺序执行脚本，async却无顺序可言，哪个脚本先加载完就执行哪个脚本。具体的执行顺序如下图：</p>
+<p><img src="https://raw.githubusercontent.com/ForestCold/image/master/%E8%AF%BB2-1.jpg" alt=""></p>
+<blockquote>
+<ul>
+<li><strong>src：</strong> 包含要执行的外部文件。</li>
+<li><strong>type：</strong> 表示编写代码所使用的脚本语言内容类型，默认为 text/JavaScript。</li>
+</ul>
+</blockquote>
+<h1 id="script执行方式"><a href="#script执行方式" class="headerlink" title="script执行方式"></a>script执行方式</h1><p>&lt;script&#62;有嵌入式代码和包含外部脚本两种执行方式，分别是在&lt;script&#62;&lt;/script&#62;标签中间编写JavaScript代码，或者使用src属性引入外部的JavaScript脚本。这两种方式你应该都非常熟悉了，唯一值得注意的是不要混用这两种写法，否则嵌入式代码将不被执行。</p>
+<p>如果可以，应该尽可能使用外部脚本，相对嵌入式代码而言，它拥有 <em>可维护性</em>、<em>可缓存</em>、<em>适应未来</em> 三个优点。</p>
+<h1 id="script标签的放置位置"><a href="#script标签的放置位置" class="headerlink" title="script标签的放置位置"></a>script标签的放置位置</h1><p>最佳的&lt;script&#62;标签放置位置应该在&lt;/body&#62;标签的上方，这样在解析JavaScript之前浏览器页面就已经渲染了出来。对于那些没有耐心的用户来说，这无疑是一种最友好的方式。</p>
+<h1 id="文档模式"><a href="#文档模式" class="headerlink" title="文档模式"></a>文档模式</h1><blockquote>
+<ul>
+<li><strong>文档模式：</strong> 包括 <strong>混杂模式（quirks mode）</strong>、<strong>标准模式</strong> 和 <strong>准标准模式</strong>，通过文档类型切换实现。</li>
+</ul>
+</blockquote>
+<p>我们在网页头部经常看到的&lt;!DOCTYPE html&gt;决定了文档模式。不同的文档模式主要影响以下几个问题：</p>
+<blockquote>
+<ul>
+<li>盒模型的解析（经常造成不同浏览器上图片样式不同的问题）。</li>
+<li>图片底部的空白（标准模式下图片底部有3px的空白，混杂模式则没有）。</li>
+<li>表格中的字体是否继承祖先元素（混杂模式下不会继承）。</li>
+<li>混杂模式下的IE浏览器，给inline设置宽高都有效，并且和其它浏览器对百分比的宽度和高度解析不同。</li>
+<li>混杂模式下的IE溢出内容会自适应尺寸，而标准模式下溢出元素是可见的。</li>
+</ul>
+</blockquote>
+<p>关于文档模式的更多细节请参见<a href="http://www.cnblogs.com/qianlegeqian/p/4067635.html" target="_blank" rel="external">叫我钱了个浅的博客</a>。<br>由于之后还会深入学习文档模式，所以这里做个简单了解就可以啦。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;在HTML中使用JavaScript&lt;/code&gt;    &lt;code&gt;对应「JavaScript高级程序设计」中的第二章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="JavaScript" scheme="http://hanfeilin.com/tags/JavaScript/"/>
+    
+      <category term="HTML" scheme="http://hanfeilin.com/tags/HTML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript简史</title>
+    <link href="http://hanfeilin.com/2017/07/28/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-JS%E9%AB%98%E7%BA%A7-1/"/>
+    <id>http://hanfeilin.com/2017/07/28/读书笔记-JS高级-1/</id>
+    <published>2017-07-28T14:54:05.000Z</published>
+    <updated>2017-08-01T12:28:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>JavaScript简介</code>    <code>JavaScript的诞生背景</code>    <code>JavaScript的组成（ECMAScript核心，DOM和BOM）</code>   <code>对应「JavaScript高级程序设计」目录和第一章</code></p>
+<a id="more"></a>
+<hr>
+<blockquote>
+<p><em>这本书实实在在，深入浅出，读来就好像尼古拉斯对不同层次的读者了如指掌，所以他的风格才这么贴切自然。</em></p>
+</blockquote>
+<p>作为一个励志要成为前端大神的前端小白，这本书应该是深入学习JavaScript的一个绝佳选择。高颜值封面、浅显的语言表达、清晰的逻辑结构以及丰富的代码示例…想想都要流口水了(๑¯∀¯๑)</p>
+<p>不过刚开始阅读一本书，还是得从目录看起。</p>
+<h1 id="本书目录结构"><a href="#本书目录结构" class="headerlink" title="本书目录结构"></a>本书目录结构</h1><p>自己整理了一下本书的目录结构，知识有限不知道对不对，等读完全书再回来修改吧。</p>
+<ul>
+<li><strong>第1章：</strong> JavaScript简介，也是本文接下来会重点整理的章节</li>
+<li><strong>第2章 - 第7章：</strong> JavaScript的基本概念以及一些重要属性</li>
+<li><strong>第8章 - 第12章：</strong> BOM与DOM的相关介绍</li>
+<li><strong>第13章 - 第17章：</strong> 事件、表单、绘图以及媒体元素的处理，错误处理调试</li>
+<li><strong>第18章 - 第21章：</strong> XML、E4X、JSON、AJAX与Comet的相关介绍</li>
+<li><strong>第22章 - 第25章：</strong> JavaScript高级主题</li>
+</ul>
+<p>看完目录结构之后，对全书的内容就有了一个大致的了解。如果在以前，我大概会直接跳过第1章的内容，带有目的性地翻阅后面的章节。不过现在作为知识的扩充，还是从第一章踏踏实实地看起，毕竟工欲善其事，必先利其器。</p>
+<h1 id="JavaScript诞生背景"><a href="#JavaScript诞生背景" class="headerlink" title="JavaScript诞生背景"></a>JavaScript诞生背景</h1><ul>
+<li><strong>生日:</strong> 1995年（居然比我还年轻！瞬间觉得自己老了…）</li>
+<li><strong>父亲姓名:</strong> 布兰登·艾奇（Brendan Eich），NetScape（网景）公司（创始人居然是UIUC的学长，更要好好学JS才行&gt; &lt;）</li>
+<li><strong>曾用名:</strong> LiveScript，后来NetScape为了赶Java的时髦将其改成了JavaScript，所以JavaScript和Java其实没有一点关系。以及LiveWire(最早的JavaScript在服务器上的名字)。</li>
+<li><strong>诞生原因:</strong>  很早以前是由服务端（如Perl语言）来处理表单数据的，但是那时候上网速度很慢（绝大多数用户都用调制解调器上网），每次表单数据从客户端传回服务端进行处理都会挑战用户的耐心。为了发明一种能在客户端上处理表单数据的验证器，JavaScript诞生了。诞生之初的JavaScript被同时在浏览器和服务器中使用。</li>
+<li><strong>标准化原因:</strong> 为了向IE浏览器投入更多资源来与竞争对手抗衡，微软在IE3中加入了JScript（为了和JavaScript进行版权区分，实际是JavaScript实现）。此时有了JavaScript和JScript两个版本的JavaScript实现，急需进行标准化。</li>
+<li><strong>标准化进程:</strong> 1997年JavaScript1.1被作为蓝本建议提交给了ECMA（欧洲计算机制造商协会），数月后ECMAScript，也就是一种新的脚本语言标准诞生了。</li>
+</ul>
+<h1 id="JavaScript组成"><a href="#JavaScript组成" class="headerlink" title="JavaScript组成"></a>JavaScript组成</h1><p>ECMAScript并不完全代表JavaScript，完整的JavaScript由 <strong>核心（ECMAScript）</strong>, <strong>文档对象模型（DOM）</strong>，和 <strong>浏览器对象模型（BOM）</strong> 组成。</p>
+<h2 id="核心（ECMAScript）"><a href="#核心（ECMAScript）" class="headerlink" title="核心（ECMAScript）"></a>核心（ECMAScript）</h2><p>ECMAScript不包含输入输出定义，因此不依赖于宿主环境。ECMAScript可能的宿主环境包括Web浏览器、Node(一种服务端的JavaScript平台)以及Adobe Flash。</p>
+<blockquote>
+<p><strong>宿主环境：</strong> 提供语言的实现和扩展，以便语言和实现之间的交互。</p>
+</blockquote>
+<p>ECMAScript规定了包括语法、类型、语句、关键字、保留字、操作符和对象在内的语言标准。除了JavaScript之外，Adobe ActionScript（就是我们小时候都接触过的，用来在Adobe Flash上编写动画的脚本语言）也采用了ECMAScript标准。</p>
+<blockquote>
+<p><strong>ECMAScript版本：</strong> <em>第一版</em> 与最初提交的JavaScript1.1本质相同，只是在语言兼容性和平台兼容性上做了些小改动。<em>第2版</em> 的改动可以忽略。<em>第3版</em> 修改和新增了很多内容，标志着ECMAScript成为了一门真正的编程语言。<em>第4版</em> 为了满足快速变化的Web需求，进行了一次大修改，结果因为修改得太多最终被抛弃。<em>第5版</em> 回归第3版，在第3版的基础上增加了JSON等新功能。</p>
+</blockquote>
+<p>读到这里忍不住搜了关于NetScape的小故事。94年，NetScape开创了民用浏览器的先河，改变了整个世界。99年，NetScape被AOL收购，结束了它短暂的一生。短短五年，NetScape从巅峰走向落败。<br>NetScape在94年发布第一款民用浏览器后，成为了微软的眼中钉。微软一周之后就发布了第一代IE，之后以操作系统Windows捆绑浏览器IE的方式逐渐占领市场份额。NetScape对此决定奋起反击，它使出全部力量创建了Mozilla项目组，将代码开源，寄希望于NetScape的代码能成为互联网标准。Mozilla在1998年3月31日那天（好日子）成功发布产品，尽管受到了不少赞扬，然而由于IE的受众之广，NetScape期待的绝地反击并没有到来。就这样，NetScape败给了微软，从历史长河中消失了， 而NetScape在99年被AOL收购之后，Mozilla项目组独立了出来，最终开发了今天的火狐（FireFox）浏览器。</p>
+<h2 id="文档对象模型（DOM）"><a href="#文档对象模型（DOM）" class="headerlink" title="文档对象模型（DOM）"></a>文档对象模型（DOM）</h2><blockquote>
+<p><strong>文档对象模型（DOM）</strong> 是针对XML但经过扩展用于HTML的应用程序编程接口（API） 。</p>
+</blockquote>
+<p>这个定义有点拗口，最初很容易将它与HTML混为一谈，认为HTML就是一种DOM。其实XML（可扩展标记语言）或HTML（超文本标记语言）属于 <strong>标记语言</strong>，标记语言是一种将文本（Text）以及文本相关的其他信息结合起来，展现出关于文档结构和数据处理细节的计算机文字编码。例如，HTML是将网页上的元素以及它们之间的结构关系用一种通用方式展现出来的方法。</p>
+<p>而DOM是可以在标记语言中动态修改文档的API，提供改变文档的内容和呈现方式的接口。DOM会将HTML页面映射成一个个树形图（很好理解就不加图了），JavaScript通过调用DOM提供的接口达到修改HTML文档的目的。然而DOM独立于编程语言，它可以被除了JavaScript外的其它编程语言调用。</p>
+<blockquote>
+<p>DOM是一种W3C（World Wide Web Consortium）标准。</p>
+</blockquote>
+<p>仍旧是NetScape和微软的锅，这俩开发的浏览器分别支持不同形式的DHTML，为了保证Web的跨平台性，制定一个标准是非常必要的。所以W3C就制定了DOM标准。</p>
+<blockquote>
+<p><strong>DOM的级别</strong> <em>DOM0</em> 并不存在，通常指代DHTML。 <em>DOM1</em> 分为支持XML的DOM核心和支持HTML的DOM HTML，主要是映射文档结构。 <em>DOM2</em> 扩充了很多细分模块，增加了对CSS的支持。<em>DOM3</em> 对DOM进行了进一步扩展。</p>
+</blockquote>
+<p>除了XML和HTML，SVG（可伸缩矢量图，数据可视化领域的应用广泛），MathML（数学标记语言）和SMIL（同步多媒体集成语言）等语言也都支持DOM标准。</p>
+<h2 id="浏览器对象模型（BOM）"><a href="#浏览器对象模型（BOM）" class="headerlink" title="浏览器对象模型（BOM）"></a>浏览器对象模型（BOM）</h2><blockquote>
+<p><strong>浏览器对象模型（BOM）</strong> 提供了独立于内容而与浏览器窗口进行交互的对象。</p>
+</blockquote>
+<p>和DOM模型所管理的页面不同，BOM模型管理的对象是页面之外的窗口，主要负责窗口之间的通讯，例如弹窗，移动缩放关闭窗口等。BOM目前还没有统一标准，但HTML5为很多BOM的问题制定了规范。</p>
+<p>之后的第8到12章还会对DOM和BOM做一个详细的介绍，这里做个简单的了解就足够啦。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;JavaScript简介&lt;/code&gt;    &lt;code&gt;JavaScript的诞生背景&lt;/code&gt;    &lt;code&gt;JavaScript的组成（ECMAScript核心，DOM和BOM）&lt;/code&gt;   &lt;code&gt;对应「JavaScript高级程序设计」目录和第一章&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="读书笔记" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="JavaScript高级程序设计" scheme="http://hanfeilin.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+      <category term="JavaScript" scheme="http://hanfeilin.com/tags/JavaScript/"/>
+    
+      <category term="DOM" scheme="http://hanfeilin.com/tags/DOM/"/>
+    
+      <category term="BOM" scheme="http://hanfeilin.com/tags/BOM/"/>
+    
+  </entry>
+  
+</feed>

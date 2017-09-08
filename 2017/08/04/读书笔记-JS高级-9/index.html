@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Bitstream Vera Sans:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="作用域,参数传递,垃圾回收," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Magic Yummy's home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="参数传递    值传递    引用传递    作用域    作用域链    函数声明    函数表达式    变量提升    执行上下文    变量对象    活动对象    函数调用栈    对应「JavaScript高级程序设计」中部分第四章和部分第七章">
+<meta name="keywords" content="作用域,参数传递,垃圾回收">
+<meta property="og:type" content="article">
+<meta property="og:title" content="作用域的相关概念和垃圾回收机制">
+<meta property="og:url" content="http://hanfeilin.com/2017/08/04/读书笔记-JS高级-9/index.html">
+<meta property="og:site_name" content="Magic Yummy&#39;s home">
+<meta property="og:description" content="参数传递    值传递    引用传递    作用域    作用域链    函数声明    函数表达式    变量提升    执行上下文    变量对象    活动对象    函数调用栈    对应「JavaScript高级程序设计」中部分第四章和部分第七章">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/ForestCold/image/master/du-9-1.jpg">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1846966-415de0df2377e436.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-08-04T10:04:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="作用域的相关概念和垃圾回收机制">
+<meta name="twitter:description" content="参数传递    值传递    引用传递    作用域    作用域链    函数声明    函数表达式    变量提升    执行上下文    变量对象    活动对象    函数调用栈    对应「JavaScript高级程序设计」中部分第四章和部分第七章">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/ForestCold/image/master/du-9-1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'YZ616ZC03L',
+      apiKey: 'bc5156a5e812ba6f39ca00a3ecdfd9ee',
+      indexName: 'search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入查找内容","hits_empty":"怎么办呢，找不到: ${query} ...","hits_stats":"在 ${time} ms 找到了 ${hits}"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hanfeilin.com/2017/08/04/读书笔记-JS高级-9/"/>
+
+
+
+
+
+
+
+
+
+  <title>作用域的相关概念和垃圾回收机制 | Magic Yummy's home</title>
+  <style>
+      .forkme{
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+          .forkme{
+              display: inline;
+          }
+      }
+      </style>
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+      <div class="forkme">
+          <a href="https://github.com/ForestCold"><img style="width: 10% ;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Magic Yummy's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">玛吉雅米の窝  ｡◕‿◕｡</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            我的简历
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar-o"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            留言板
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photo">
+          <a href="/photo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://hanfeilin.com/2017/08/04/读书笔记-JS高级-9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hanfei Lin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Magic Yummy's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">作用域的相关概念和垃圾回收机制</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-04T11:04:34-05:00">
+                2017-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/JavaScript高级程序设计/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript高级程序设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/04/读书笔记-JS高级-9/" class="leancloud_visitors" data-flag-title="作用域的相关概念和垃圾回收机制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>参数传递</code>    <code>值传递</code>    <code>引用传递</code>    <code>作用域</code>    <code>作用域链</code>    <code>函数声明</code>    <code>函数表达式</code>    <code>变量提升</code>    <code>执行上下文</code>    <code>变量对象</code>    <code>活动对象</code>    <code>函数调用栈</code>    <code>对应「JavaScript高级程序设计」中部分第四章和部分第七章</code></p>
+<a id="more"></a>
+<hr>
+<p>JavaScript中的作用域真的比原型还要难以理解，挣扎了两天好在总算是搞懂了。这一部分主要的难点之一在于出现了非常多新的概念，很容易把它们搞混。另一个主要的难点在于对闭包和this的理解，这一部分将在下一篇博文中进行整理。</p>
+<h1 id="参数传递机制"><a href="#参数传递机制" class="headerlink" title="参数传递机制"></a>参数传递机制</h1><p>主要的参数传递机制包括 <strong>按值传递</strong> 和 <strong>按引用传递</strong>。两者的主要区别在于按值传递的话形参的值等于实参的值，按引用传递的话形参的值等于实参的地址。JavaScript中所有的参数传递方式都是按值传递，无论传递的是基本数据类型还是引用数据类型。</p>
+<p>对于基本数据类型的按值传递非常好理解，形参的值自然等于实参的值，在函数内部对形参进行修改，是不会影响到函数外部实参的值的。可是对于引用类型，很多人会误认为它是按引用传递的，这么认为的理由是在函数内部对引用类型的形参的修改，能够影响到函数外部引用类型的实参的值。</p>
+<p>但是需要注意的是，JavaScript中引用类型变量本身，保存的就是对象地址。因此将引用类型变量本身赋值给一个函数的形参时，赋值过去的就是对象的地址。函数在函数体中能够访问这个对象所在的内存空间，因此对它的修改才会反应到函数外部。以下代码能够证明引用类型是按值传递的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function setName(<span class="class"><span class="keyword">object</span>)</span>&#123;</div><div class="line">  <span class="class"><span class="keyword">object</span>.<span class="title">name</span> </span>= <span class="string">"Yummy"</span>;</div><div class="line">  <span class="class"><span class="keyword">object</span> </span>= <span class="keyword">new</span> <span class="type">Object</span>();</div><div class="line">  <span class="class"><span class="keyword">object</span>.<span class="title">name</span> </span>= <span class="string">"Magic"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="type">Object</span>();</div><div class="line">setName(person);</div><div class="line">alert(person.name); <span class="comment">//"Yummy"</span></div></pre></td></tr></table></figure>
+<p>这段函数中对object的赋值操作无法影响到person.name属性，证明了object是按值传递的。如果person的属性被修改，打印出的是”Magic”的话，就证明object是按引用传递的。为什么呢？我们可以通过下图更清晰地了解。</p>
+<p><img src="https://raw.githubusercontent.com/ForestCold/image/master/du-9-1.jpg" alt=""></p>
+<p>在按值传递的情况下，函数接收到的参数是person的值，这张图中是2这个值，对应了person所指向的对象的地址。当执行到第三行时，实际上是在另一个地址区新建了一个对象（这张图中在地址3中）。由于object的值是2，是一个堆内存中的地址，因此执行完这句话仅仅是将object的值变成了3而已，person中保存的仍然是地址2，所以person.name仍然是地址2处的name。</p>
+<p>在按引用传递的情况下，函数接收到的参数是person的地址，这张图中对应1这个值。当执行第3句话时，在地址3处新建了一个对象，由于object是一个地址，给它赋值相当于给它所在的内存区域赋值，因此1这个地址的值由2变成了3，person的指向由图中的实线变成了虚线，此时打印出来的自然就是地址3处的name。</p>
+<h1 id="作用域的相关概念"><a href="#作用域的相关概念" class="headerlink" title="作用域的相关概念"></a>作用域的相关概念</h1><p>JavaScript中的作用域包含非常多的概念。在ECMAScript5以及ECMAScript5之前JavaScript中没有块级作用域的概念，只有函数作用域和全局作用域。</p>
+<h2 id="执行上下文（Execution-Context）"><a href="#执行上下文（Execution-Context）" class="headerlink" title="执行上下文（Execution Context）"></a>执行上下文（Execution Context）</h2><blockquote>
+<p><strong>执行上下文</strong>，有时候称为执行环境，指的是代码的运行环境。执行上下文和作用域的概念有所不同，作用域指的是当前执行上下文（也就是 <strong>活动上下文</strong> ）包含的 <strong>变量对象</strong> 。</p>
+</blockquote>
+<p>执行上下文有两种情况确定。当浏览器开始执行一段JavaScript代码的时候，创建并进入的是全局执行上下文。每当一个函数被调用的时候，为其创建并进入一个函数执行上下文。这些执行上下文都按照次序保存在一个 <strong>执行上下文栈</strong> 中。每创建一个执行上下文就将它压栈，离开一个执行上下文就将它从栈中弹出。而处于栈顶的执行上下文被称为活动上下文，代表当前正在执行的代码的运行环境。</p>
+<p>一个执行上下文中，包含了以下三个变量：</p>
+<ul>
+<li>变量对象（Variable object），包含当前执行作用域中的形参、变量声明和函数声明</li>
+<li>作用域链（Scope chain），指针链表，每一个节点都指向一个变量对象</li>
+<li><p>this，将在下一篇博文中重点介绍</p>
+<p>下面来看看变量对象和作用域链是怎么回事。</p>
+</li>
+</ul>
+<h2 id="变量对象"><a href="#变量对象" class="headerlink" title="变量对象"></a>变量对象</h2><blockquote>
+<p><strong>变量对象</strong> 是与执行上下文相关的数据作用域。它是一个与上下文相关的特殊对象，其中存储了在上下文中定义的变量和函数声明。</p>
+</blockquote>
+<p> 当一个函数被调用的时候，在所有代码被执行之前，会先为它初始化一个执行上下文。在初始化执行上下文中的变量对象时，首先遍历这个函数定义部分的内容，将所有形参、变量声明（var开头）和函数声明（function开头）放到变量对象中，并将变量声明赋值为undefined，将函数声明赋值为函数名和函数。如果发现一个变量的名字和已声明的变量和函数相同就跳过它，如果发现一个函数的名字和已声明的函数相同就覆盖它。这个过程也称为 <strong>变量提升</strong> 或 <strong>函数提升</strong> 。</p>
+<p> 特别需要注意的是，不以var和function进行声明的变量和函数将会被添加到全局作用域中。</p>
+<p> 接着，函数中的代码会被执行，遇到变量对象中的变量则更新它的值。下面通过一个例子来深入理解这一过程。</p>
+ <figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> (<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    console.<span class="built_in">log</span>(foo);     //undefined</div><div class="line">    console.<span class="built_in">log</span>(bar);     //<span class="function"><span class="keyword">function</span> <span class="title">bar</span><span class="params">()</span></span>&#123;  console.<span class="built_in">log</span>(<span class="string">"bar"</span>);  &#125;</div><div class="line">    console.<span class="built_in">log</span>(baz);     //<span class="function"><span class="keyword">function</span> <span class="title">baz</span><span class="params">()</span></span>&#123;  console.<span class="built_in">log</span>(<span class="string">"baz"</span>);  &#125;</div><div class="line"></div><div class="line">    var foo = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;&#125;;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bar</span><span class="params">()</span></span>&#123;</div><div class="line">        console.<span class="built_in">log</span>(<span class="string">"bar"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var bar = <span class="number">20</span>;</div><div class="line">    console.<span class="built_in">log</span>(bar);     //<span class="number">20</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">baz</span><span class="params">()</span></span>&#123;</div><div class="line">        console.<span class="built_in">log</span>(<span class="string">"baz"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+<p>这个例子中， (function(){…})()的语法是一个模拟块级作用域的语法，我们将在下一篇博文中详细介绍，这里只要理解这是一个作用域就行了。当进入这个作用域时，随即生成了一个执行上下文，其中的变量对象进行初始化。首先将所有var开头的变量声明加入变量对象并赋值undefined，然后将所有function开头的函数声明的名字和函数内容加入变量对象。</p>
+<p>接着，代码开始执行。首先打印foo，由于foo是由var关键字打头的，因此在存入变量对象时被赋值为undefined，代码从作用域链的顶端，即当前变量对象中查找foo发现找到了，值为undefined，所以打印结果为undefined。第三行和第四行，分别在变量对象中查找bar函数和baz函数的函数声明，发现都找到了，分别打印。而第13行需要特别注意，因为当解释器执行到第12行时，变量对象中bar的值会被重置为20，因此第13行打印出的结果就是20。</p>
+<h2 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h2><p>作用域链实质使一个链表，包含指向一堆变量对象的指针。它在一个执行上下文被创建的时候，首先拷贝上一层执行上下文的作用域链，然后将当前的变量对象放到原来的作用域链的顶端，并更新执行上下文中的指针，使之指向新添加进来的变量对象。</p>
+<p>作用域链的链表头包含的变量对象，也就是当前执行上下文的变量对象，被称为 <strong>活动对象</strong> 。作用域链的作用是进行 <strong>标识符解析</strong>，说白了就是查找一个变量。标识符解析总是从作用域链的链表头开始，如果找到就取出并不再往下查找，找不到就接着往上找，一直找到作用域链的末端，也就是全局上下文的变量对象。如果整条作用域链中都找不到，就报告一个错误。</p>
+<p>有两种特殊情况： try-catch语句中的catch块和with语句能够在作用域链头额外添加一个变量对象。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">with</span><span class="params">(location)</span></span> &#123;</div><div class="line">  ... <span class="comment">//这个地方可以访问location中的所有属性和方法</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于执行上下文、变量对象和作用域链之间的关系，可以由下面的例子和图进行表示：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scope = <span class="string">"global"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">CheckScope</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">var</span> scope = <span class="string">"local"</span>;</div><div class="line">    <span class="keyword">return</span> scope;</div><div class="line">&#125;</div><div class="line">CheckScope();     <span class="comment">//结果为local</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1846966-415de0df2377e436.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><em>例子来源：<a href="http://www.jianshu.com/p/181da2b57eb2" target="_blank" rel="external">bruce_zhou的简书</a></em></p>
+<h1 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h1><p>JavaScript中普遍使用两种垃圾回收机制：</p>
+<ul>
+<li><strong>标记清除</strong> 主动回收机制。首先为所有变量打上标记，接着去掉当前环境中的标记以及被当前环境中的变量引用的变量的标记，然后把所有打着标记的变量回收。</li>
+<li><strong>引用计数</strong> 被动回收机制。跟踪每个值被引用的次数，当一个变量被引用次数为0时就将其回收。但是引用计数容易造成 <strong>循环引用</strong> 的问题，例如在IE中使用一个COM对象（Component Object Model，将在之后的BOM和DOM部分进行介绍）。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div style= "margin-bottom: 10px">如果您喜欢我，就帮我的主人买包旺旺仙贝吧O(∩_∩)O！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>买买买</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/weichat.jpg" alt="Hanfei Lin WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="Hanfei Lin Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i>  读到这里的都是真爱 ❤-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/作用域/" rel="tag"># 作用域</a>
+          
+            <a href="/tags/参数传递/" rel="tag"># 参数传递</a>
+          
+            <a href="/tags/垃圾回收/" rel="tag"># 垃圾回收</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/31/读书笔记-JS高级-8/" rel="next" title="原型链和寄生组合继承">
+                <i class="fa fa-chevron-left"></i> 原型链和寄生组合继承
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/04/读书笔记-JS高级-10/" rel="prev" title="闭包、this对象和匿名函数">
+                闭包、this对象和匿名函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Hanfei Lin" />
+          <p class="site-author-name" itemprop="name">Hanfei Lin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ForestCold" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://linkedin.com/in/hanfei-lin" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin-square"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/3232698014?topnav=1&wvr=6&topsug=1&is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参数传递机制"><span class="nav-number">1.</span> <span class="nav-text">参数传递机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#作用域的相关概念"><span class="nav-number">2.</span> <span class="nav-text">作用域的相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#执行上下文（Execution-Context）"><span class="nav-number">2.1.</span> <span class="nav-text">执行上下文（Execution Context）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量对象"><span class="nav-number">2.2.</span> <span class="nav-text">变量对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域链"><span class="nav-number">2.3.</span> <span class="nav-text">作用域链</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾回收机制"><span class="nav-number">3.</span> <span class="nav-text">垃圾回收机制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hanfei Lin</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2139993"></script>
+      <!-- UY END -->
+
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("PXcHUPmaGCHHAduS0ujzN7Pw-gzGzoHsz", "rkGKgaFFkY38Jw0pWlIGR9hv");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.1"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.1"></script>
+
+
+
+  <!--  -->
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

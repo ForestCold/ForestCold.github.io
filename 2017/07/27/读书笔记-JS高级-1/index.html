@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Bitstream Vera Sans:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,DOM,BOM," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Magic Yummy's home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript简介    JavaScript的诞生背景    JavaScript的组成（ECMAScript核心，DOM和BOM）   对应「JavaScript高级程序设计」目录和第一章">
+<meta name="keywords" content="JavaScript,DOM,BOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript简史">
+<meta property="og:url" content="http://hanfeilin.com/2017/07/27/读书笔记-JS高级-1/index.html">
+<meta property="og:site_name" content="Magic Yummy&#39;s home">
+<meta property="og:description" content="JavaScript简介    JavaScript的诞生背景    JavaScript的组成（ECMAScript核心，DOM和BOM）   对应「JavaScript高级程序设计」目录和第一章">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-01T12:28:27.027Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript简史">
+<meta name="twitter:description" content="JavaScript简介    JavaScript的诞生背景    JavaScript的组成（ECMAScript核心，DOM和BOM）   对应「JavaScript高级程序设计」目录和第一章">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'YZ616ZC03L',
+      apiKey: 'bc5156a5e812ba6f39ca00a3ecdfd9ee',
+      indexName: 'search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入查找内容","hits_empty":"怎么办呢，找不到: ${query} ...","hits_stats":"在 ${time} ms 找到了 ${hits}"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hanfeilin.com/2017/07/27/读书笔记-JS高级-1/"/>
+
+
+
+
+
+
+
+
+
+  <title>JavaScript简史 | Magic Yummy's home</title>
+  <style>
+      .forkme{
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+          .forkme{
+              display: inline;
+          }
+      }
+      </style>
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+      <div class="forkme">
+          <a href="https://github.com/ForestCold"><img style="width: 10% ;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Magic Yummy's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">玛吉雅米の窝  ｡◕‿◕｡</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            我的简历
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar-o"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            留言板
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photo">
+          <a href="/photo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://hanfeilin.com/2017/07/27/读书笔记-JS高级-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hanfei Lin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Magic Yummy's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">JavaScript简史</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-27T20:54:05-05:00">
+                2017-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/JavaScript高级程序设计/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript高级程序设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/07/27/读书笔记-JS高级-1/" class="leancloud_visitors" data-flag-title="JavaScript简史">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>JavaScript简介</code>    <code>JavaScript的诞生背景</code>    <code>JavaScript的组成（ECMAScript核心，DOM和BOM）</code>   <code>对应「JavaScript高级程序设计」目录和第一章</code></p>
+<a id="more"></a>
+<hr>
+<blockquote>
+<p><em>这本书实实在在，深入浅出，读来就好像尼古拉斯对不同层次的读者了如指掌，所以他的风格才这么贴切自然。</em></p>
+</blockquote>
+<p>作为一个励志要成为前端大神的前端小白，这本书应该是深入学习JavaScript的一个绝佳选择。高颜值封面、浅显的语言表达、清晰的逻辑结构以及丰富的代码示例…想想都要流口水了(๑¯∀¯๑)</p>
+<p>不过刚开始阅读一本书，还是得从目录看起。</p>
+<h1 id="本书目录结构"><a href="#本书目录结构" class="headerlink" title="本书目录结构"></a>本书目录结构</h1><p>自己整理了一下本书的目录结构，知识有限不知道对不对，等读完全书再回来修改吧。</p>
+<ul>
+<li><strong>第1章：</strong> JavaScript简介，也是本文接下来会重点整理的章节</li>
+<li><strong>第2章 - 第7章：</strong> JavaScript的基本概念以及一些重要属性</li>
+<li><strong>第8章 - 第12章：</strong> BOM与DOM的相关介绍</li>
+<li><strong>第13章 - 第17章：</strong> 事件、表单、绘图以及媒体元素的处理，错误处理调试</li>
+<li><strong>第18章 - 第21章：</strong> XML、E4X、JSON、AJAX与Comet的相关介绍</li>
+<li><strong>第22章 - 第25章：</strong> JavaScript高级主题</li>
+</ul>
+<p>看完目录结构之后，对全书的内容就有了一个大致的了解。如果在以前，我大概会直接跳过第1章的内容，带有目的性地翻阅后面的章节。不过现在作为知识的扩充，还是从第一章踏踏实实地看起，毕竟工欲善其事，必先利其器。</p>
+<h1 id="JavaScript诞生背景"><a href="#JavaScript诞生背景" class="headerlink" title="JavaScript诞生背景"></a>JavaScript诞生背景</h1><ul>
+<li><strong>生日:</strong> 1995年（居然比我还年轻！瞬间觉得自己老了…）</li>
+<li><strong>父亲姓名:</strong> 布兰登·艾奇（Brendan Eich），NetScape（网景）公司（创始人居然是UIUC的学长，更要好好学JS才行&gt; &lt;）</li>
+<li><strong>曾用名:</strong> LiveScript，后来NetScape为了赶Java的时髦将其改成了JavaScript，所以JavaScript和Java其实没有一点关系。以及LiveWire(最早的JavaScript在服务器上的名字)。</li>
+<li><strong>诞生原因:</strong>  很早以前是由服务端（如Perl语言）来处理表单数据的，但是那时候上网速度很慢（绝大多数用户都用调制解调器上网），每次表单数据从客户端传回服务端进行处理都会挑战用户的耐心。为了发明一种能在客户端上处理表单数据的验证器，JavaScript诞生了。诞生之初的JavaScript被同时在浏览器和服务器中使用。</li>
+<li><strong>标准化原因:</strong> 为了向IE浏览器投入更多资源来与竞争对手抗衡，微软在IE3中加入了JScript（为了和JavaScript进行版权区分，实际是JavaScript实现）。此时有了JavaScript和JScript两个版本的JavaScript实现，急需进行标准化。</li>
+<li><strong>标准化进程:</strong> 1997年JavaScript1.1被作为蓝本建议提交给了ECMA（欧洲计算机制造商协会），数月后ECMAScript，也就是一种新的脚本语言标准诞生了。</li>
+</ul>
+<h1 id="JavaScript组成"><a href="#JavaScript组成" class="headerlink" title="JavaScript组成"></a>JavaScript组成</h1><p>ECMAScript并不完全代表JavaScript，完整的JavaScript由 <strong>核心（ECMAScript）</strong>, <strong>文档对象模型（DOM）</strong>，和 <strong>浏览器对象模型（BOM）</strong> 组成。</p>
+<h2 id="核心（ECMAScript）"><a href="#核心（ECMAScript）" class="headerlink" title="核心（ECMAScript）"></a>核心（ECMAScript）</h2><p>ECMAScript不包含输入输出定义，因此不依赖于宿主环境。ECMAScript可能的宿主环境包括Web浏览器、Node(一种服务端的JavaScript平台)以及Adobe Flash。</p>
+<blockquote>
+<p><strong>宿主环境：</strong> 提供语言的实现和扩展，以便语言和实现之间的交互。</p>
+</blockquote>
+<p>ECMAScript规定了包括语法、类型、语句、关键字、保留字、操作符和对象在内的语言标准。除了JavaScript之外，Adobe ActionScript（就是我们小时候都接触过的，用来在Adobe Flash上编写动画的脚本语言）也采用了ECMAScript标准。</p>
+<blockquote>
+<p><strong>ECMAScript版本：</strong> <em>第一版</em> 与最初提交的JavaScript1.1本质相同，只是在语言兼容性和平台兼容性上做了些小改动。<em>第2版</em> 的改动可以忽略。<em>第3版</em> 修改和新增了很多内容，标志着ECMAScript成为了一门真正的编程语言。<em>第4版</em> 为了满足快速变化的Web需求，进行了一次大修改，结果因为修改得太多最终被抛弃。<em>第5版</em> 回归第3版，在第3版的基础上增加了JSON等新功能。</p>
+</blockquote>
+<p>读到这里忍不住搜了关于NetScape的小故事。94年，NetScape开创了民用浏览器的先河，改变了整个世界。99年，NetScape被AOL收购，结束了它短暂的一生。短短五年，NetScape从巅峰走向落败。<br>NetScape在94年发布第一款民用浏览器后，成为了微软的眼中钉。微软一周之后就发布了第一代IE，之后以操作系统Windows捆绑浏览器IE的方式逐渐占领市场份额。NetScape对此决定奋起反击，它使出全部力量创建了Mozilla项目组，将代码开源，寄希望于NetScape的代码能成为互联网标准。Mozilla在1998年3月31日那天（好日子）成功发布产品，尽管受到了不少赞扬，然而由于IE的受众之广，NetScape期待的绝地反击并没有到来。就这样，NetScape败给了微软，从历史长河中消失了， 而NetScape在99年被AOL收购之后，Mozilla项目组独立了出来，最终开发了今天的火狐（FireFox）浏览器。</p>
+<h2 id="文档对象模型（DOM）"><a href="#文档对象模型（DOM）" class="headerlink" title="文档对象模型（DOM）"></a>文档对象模型（DOM）</h2><blockquote>
+<p><strong>文档对象模型（DOM）</strong> 是针对XML但经过扩展用于HTML的应用程序编程接口（API） 。</p>
+</blockquote>
+<p>这个定义有点拗口，最初很容易将它与HTML混为一谈，认为HTML就是一种DOM。其实XML（可扩展标记语言）或HTML（超文本标记语言）属于 <strong>标记语言</strong>，标记语言是一种将文本（Text）以及文本相关的其他信息结合起来，展现出关于文档结构和数据处理细节的计算机文字编码。例如，HTML是将网页上的元素以及它们之间的结构关系用一种通用方式展现出来的方法。</p>
+<p>而DOM是可以在标记语言中动态修改文档的API，提供改变文档的内容和呈现方式的接口。DOM会将HTML页面映射成一个个树形图（很好理解就不加图了），JavaScript通过调用DOM提供的接口达到修改HTML文档的目的。然而DOM独立于编程语言，它可以被除了JavaScript外的其它编程语言调用。</p>
+<blockquote>
+<p>DOM是一种W3C（World Wide Web Consortium）标准。</p>
+</blockquote>
+<p>仍旧是NetScape和微软的锅，这俩开发的浏览器分别支持不同形式的DHTML，为了保证Web的跨平台性，制定一个标准是非常必要的。所以W3C就制定了DOM标准。</p>
+<blockquote>
+<p><strong>DOM的级别</strong> <em>DOM0</em> 并不存在，通常指代DHTML。 <em>DOM1</em> 分为支持XML的DOM核心和支持HTML的DOM HTML，主要是映射文档结构。 <em>DOM2</em> 扩充了很多细分模块，增加了对CSS的支持。<em>DOM3</em> 对DOM进行了进一步扩展。</p>
+</blockquote>
+<p>除了XML和HTML，SVG（可伸缩矢量图，数据可视化领域的应用广泛），MathML（数学标记语言）和SMIL（同步多媒体集成语言）等语言也都支持DOM标准。</p>
+<h2 id="浏览器对象模型（BOM）"><a href="#浏览器对象模型（BOM）" class="headerlink" title="浏览器对象模型（BOM）"></a>浏览器对象模型（BOM）</h2><blockquote>
+<p><strong>浏览器对象模型（BOM）</strong> 提供了独立于内容而与浏览器窗口进行交互的对象。</p>
+</blockquote>
+<p>和DOM模型所管理的页面不同，BOM模型管理的对象是页面之外的窗口，主要负责窗口之间的通讯，例如弹窗，移动缩放关闭窗口等。BOM目前还没有统一标准，但HTML5为很多BOM的问题制定了规范。</p>
+<p>之后的第8到12章还会对DOM和BOM做一个详细的介绍，这里做个简单的了解就足够啦。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div style= "margin-bottom: 10px">如果您喜欢我，就帮我的主人买包旺旺仙贝吧O(∩_∩)O！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>买买买</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/weichat.jpg" alt="Hanfei Lin WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="Hanfei Lin Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i>  读到这里的都是真爱 ❤-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/DOM/" rel="tag"># DOM</a>
+          
+            <a href="/tags/BOM/" rel="tag"># BOM</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/28/读书笔记-JS高级-2/" rel="prev" title="在HTML中使用JavaScript">
+                在HTML中使用JavaScript <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Hanfei Lin" />
+          <p class="site-author-name" itemprop="name">Hanfei Lin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ForestCold" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://linkedin.com/in/hanfei-lin" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin-square"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/3232698014?topnav=1&wvr=6&topsug=1&is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#本书目录结构"><span class="nav-number">1.</span> <span class="nav-text">本书目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript诞生背景"><span class="nav-number">2.</span> <span class="nav-text">JavaScript诞生背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript组成"><span class="nav-number">3.</span> <span class="nav-text">JavaScript组成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心（ECMAScript）"><span class="nav-number">3.1.</span> <span class="nav-text">核心（ECMAScript）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档对象模型（DOM）"><span class="nav-number">3.2.</span> <span class="nav-text">文档对象模型（DOM）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器对象模型（BOM）"><span class="nav-number">3.3.</span> <span class="nav-text">浏览器对象模型（BOM）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hanfei Lin</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2139993"></script>
+      <!-- UY END -->
+
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("PXcHUPmaGCHHAduS0ujzN7Pw-gzGzoHsz", "rkGKgaFFkY38Jw0pWlIGR9hv");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.1"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.1"></script>
+
+
+
+  <!--  -->
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Bitstream Vera Sans:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="闭包,作用域,this对象,函数," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Magic Yummy's home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="闭包    匿名函数    this对象    模仿块级作用域    分组操作符    私有变量    静态私有变量    模块模式    增强的模块模式    对应「JavaScript高级程序设计」中部分第四章和部分第七章">
+<meta name="keywords" content="闭包,作用域,this对象,函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="闭包、this对象和匿名函数">
+<meta property="og:url" content="http://hanfeilin.com/2017/08/03/读书笔记-JS高级-10/index.html">
+<meta property="og:site_name" content="Magic Yummy&#39;s home">
+<meta property="og:description" content="闭包    匿名函数    this对象    模仿块级作用域    分组操作符    私有变量    静态私有变量    模块模式    增强的模块模式    对应「JavaScript高级程序设计」中部分第四章和部分第七章">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-04T14:38:04.775Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="闭包、this对象和匿名函数">
+<meta name="twitter:description" content="闭包    匿名函数    this对象    模仿块级作用域    分组操作符    私有变量    静态私有变量    模块模式    增强的模块模式    对应「JavaScript高级程序设计」中部分第四章和部分第七章">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'YZ616ZC03L',
+      apiKey: 'bc5156a5e812ba6f39ca00a3ecdfd9ee',
+      indexName: 'search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入查找内容","hits_empty":"怎么办呢，找不到: ${query} ...","hits_stats":"在 ${time} ms 找到了 ${hits}"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hanfeilin.com/2017/08/03/读书笔记-JS高级-10/"/>
+
+
+
+
+
+
+
+
+
+  <title>闭包、this对象和匿名函数 | Magic Yummy's home</title>
+  <style>
+      .forkme{
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+          .forkme{
+              display: inline;
+          }
+      }
+      </style>
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+      <div class="forkme">
+          <a href="https://github.com/ForestCold"><img style="width: 10% ;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Magic Yummy's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">玛吉雅米の窝  ｡◕‿◕｡</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            我的简历
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar-o"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            留言板
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photo">
+          <a href="/photo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-photo"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://hanfeilin.com/2017/08/03/读书笔记-JS高级-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hanfei Lin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Magic Yummy's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">闭包、this对象和匿名函数</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-03T22:04:35-05:00">
+                2017-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/JavaScript高级程序设计/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript高级程序设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/03/读书笔记-JS高级-10/" class="leancloud_visitors" data-flag-title="闭包、this对象和匿名函数">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>闭包</code>    <code>匿名函数</code>    <code>this对象</code>    <code>模仿块级作用域</code>    <code>分组操作符</code>    <code>私有变量</code>    <code>静态私有变量</code>    <code>模块模式</code>    <code>增强的模块模式</code>    <code>对应「JavaScript高级程序设计」中部分第四章和部分第七章</code></p>
+<a id="more"></a>
+<hr>
+<p>这一部分接着上一篇博文继续讲解作用域方面的概念，不过，比起上一篇博文，这里的概念要难理解不少。</p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><blockquote>
+<p><em>闭包</em> 是指有权访问另一个函数作用域中的变量的函数。常见的创建方式是在一个函数中创建另一个函数。</p>
+</blockquote>
+<p>根据之前学过的作用域链，我们很容易理解闭包为什么能够访问外层函数中的变量。当一个函数中不包含其它函数时，执行完它之后它所对应的活动对象将被销毁。但包含闭包的函数，在外层函数被执行之后，活动对象仍然存在。这是因为内层闭包能够访问外层函数的变量，所以必须将它们保留下来。这是为什么不能滥用闭包的原因，滥用闭包会导致内存浪费。</p>
+<p>下面我们用一个例子来说明闭包的作用。假设我们想在浏览器末端创建十个&lt;a&#62;标签，点击标签弹出对应的序号。在不了解JavaScript中的作用域机制时，我们很可能会写成下面这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i,a;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">	a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</div><div class="line">	a.innerHTML = i + <span class="string">'&lt;br&gt;'</span>;</div><div class="line">	a.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">		e.preventDefault();                     <span class="comment">//屏蔽click中的默认操作</span></div><div class="line">		alert(i);</div><div class="line">	&#125;)</div><div class="line">	<span class="built_in">document</span>.body.appendChild(a);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码的执行的结果是点击所有标签，输出都为10。造成这一现象的原因是JavaScript中不存在块级作用域，所以i实际是一个全局变量，当调用 <em>alert(i);</em> 这个语句时，访问的是全局中的i，而在这段代码执行完之后i的值已经被设置为了10。正确的写法应该是这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i,a;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params">i</span>) </span>&#123;</div><div class="line">  	a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</div><div class="line">  	a.innerHTML = i + <span class="string">'&lt;br&gt;'</span>;</div><div class="line">  	a.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  		e.preventDefault();</div><div class="line">  		alert(i);</div><div class="line">  	&#125;)</div><div class="line">  	<span class="built_in">document</span>.body.appendChild(a);</div><div class="line">	&#125;)(i);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>这一段代码和上一段代码的不同之处，是在for循环的外部包了一层(function(i){})(i)匿名函数。后面的括号表示立即执行并且传入参数为i。这种写法实际上是用匿名函数来 <strong>模拟块级作用域</strong>。此时，i（匿名函数的参数i，而不是外面定义的变量i）就变成了这个块级作用域中的变量。当调用 <em>alert(i)</em> 时，根据作用域链的原理，首先访问的是匿名函数内部的i，此时的i就是正确的值。</p>
+<ul>
+<li><p><strong>匿名函数</strong> 指的是没有函数名的函数，它的name属性为空。注意，函数名指的是function关键字后面的那个名字，对于一个函数表达式 <em>var fun = function(){}</em> 而言，fun只是一个指向它的变量，这个函数本身仍然是一个匿名函数。由于语法规定函数声明必须带有名字，所以匿名函数通常出现在函数表达式中。由于匿名函数不会被加入变量对象中，所以它们的作用域是全局作用域。当匿名函数被执行完毕，里面的变量会被立即销毁。</p>
+</li>
+<li><p><strong>为什么不能写成function(i){}(i)?</strong> 我们之前学过变量对象的初始化过程，当解释器找到一个function关键字时，就将它当做一个函数声明。然而，通过函数声明出来的函数必须有函数名，不能是匿名函数，所以这时候会抛出一个错误。解决方法就是将函数用小括号括起来。小括号其实是 <strong>分组操作符</strong> ，它内部的内容会被看做一个表达式。而它执行的结果就是这个表达式的返回值，当表达式中只有一个函数时返回值就是这个函数。</p>
+</li>
+<li><p><strong>块级作用域的作用</strong> 除了这个例子之外，块级作用域主要用来在全局变量中限制过多设置的全局对象。试想如果每个程序员都自己设置了一大堆全局变量，很容易引起变量名的冲突，这时候块级作用域就派上用场了。JQuery源码就是一个运用块级作用域的例子。</p>
+</li>
+</ul>
+<h1 id="this对象"><a href="#this对象" class="headerlink" title="this对象"></a>this对象</h1><p>JavaSript中的this对象只的是调用当前函数的对象。this对象是在函数调用的时候生成的（记得之前说过变量对象包含一个this对象，而变量对象是在函数调用时才生成的），和函数定义无关。对于所有全局变量和全局函数，由于它们是被挂到window对象上的，因此它们的this对象是window。而对于其它函数，this对象通常是这个函数执行时函数前面的点前面的那个对象。</p>
+<ul>
+<li><p>通过构造函数new一个新的对象时会改变this的指向。new的过程： 首先开辟一块内存空间，将this指向这片内存。然后给this依次挂上构造函数里的属性和方法。最后返回this。</p>
+</li>
+<li><p>对于函数表达式而言，this指向的并不是它右边函数前面的点前面的对象，而是左边变量被谁调用就指向谁，一般来说指向window。</p>
+</li>
+<li><p>对于有返回值的构造函数而言，如果返回值是一个对象（除了null），this指向那个对象，如果返回值是一个值，this指向它构造出来的实例（这种情况和第一条一样）。</p>
+</li>
+</ul>
+<h2 id="闭包中的this问题"><a href="#闭包中的this问题" class="headerlink" title="闭包中的this问题"></a>闭包中的this问题</h2><p>闭包中的this是不会指向闭包外部的函数的，因为对this的搜索只局限于当前活动对象，不会随着作用域链向上搜索。来看书上的一个例子：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">  name : <span class="string">"My object"</span>,</div><div class="line">  getNameFunc : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">alert(object.getNameFunc()()); <span class="comment">//"The Window"</span></div></pre></td></tr></table></figure></p>
+<p>这一段代码中的this访问不到闭包外层函数，因此不会等于object。而匿名函数的this指向window，因此返回的是在window中定义的变量name。不过，就算返回的函数不是匿名函数输出也是一样，因为没有对象对它进行调用。要让this能够指向object只需：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">  name : <span class="string">"My object"</span>,</div><div class="line">  getNameFunc : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(that)</span> </span>&#123;</div><div class="line">      <span class="keyword">return</span> that.name;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">alert(object.getNameFunc()()); <span class="comment">//"The object"</span></div></pre></td></tr></table></figure></p>
+<p>这样，闭包就获得了object中this的值。</p>
+<p>下面是一个让我纠结了整整一天的例子，最后发现纠结的点根本不在于this的问题，而在于表达式的问题，这里也顺便呈现以下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name  = <span class="string">"The Window"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> </span>= &#123;</div><div class="line">  name : <span class="string">"My Object"</span>,</div><div class="line">  getName : function() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span>.<span class="title">getName</span>(<span class="params"></span>)</span>;                     <span class="comment">//"My Object"</span></div><div class="line">(<span class="class"><span class="keyword">object</span>.<span class="title">getName</span>)(<span class="params"></span>)</span>;                   <span class="comment">//"My Object"</span></div><div class="line">(<span class="class"><span class="keyword">object</span>.<span class="title">getName</span> </span>= <span class="class"><span class="keyword">object</span>.<span class="title">getName</span>)(<span class="params"></span>)</span>;  <span class="comment">//"The Window"</span></div></pre></td></tr></table></figure></p>
+<p>让人纠结的是第11行和第12行的代码，我们之前说过一对小括号是一个分组操作符，实际上一对小括号会对应一个返回值。第11行这种情况返回值就是object.getName，而第12行的返回值是等式右边的object.getName。右边的object.getName实际上就是一个匿名函数（其实不匿名结果是一样的），这句话等价于：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure></p>
+<p>这个函数中的this指向的是window。</p>
+<blockquote>
+<p>对于a = b = c这个表达式来说，实际上等价于a = (b = c)，而(b = c)返回的是c不是b，因此a最终的值为c。</p>
+</blockquote>
+<h1 id="利用闭包构造私有变量"><a href="#利用闭包构造私有变量" class="headerlink" title="利用闭包构造私有变量"></a>利用闭包构造私有变量</h1><p>任何函数中定义的变量都可以被称为 <strong>私有变量</strong>，因为没法在函数外部访问这些变量。有权访问这些私有变量的方法被称为 <strong>特权方法（privileged method）</strong>。</p>
+<h2 id="构造函数中定义私有变量"><a href="#构造函数中定义私有变量" class="headerlink" title="构造函数中定义私有变量"></a>构造函数中定义私有变量</h2><p>将私有变量定义在构造函数中，并且前面不加上this.，而特权方法前面加上this.。好处是所有实例不共享私有变量，坏处是同一个特权方法在不同实例中占用不同内存（参见继承中的构造函数模式）。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyObject</span> <span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="keyword">this</span>.publicMethod = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    privateVariable++;</div><div class="line">    <span class="keyword">return</span> privateFunction();</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="静态私有变量"><a href="#静态私有变量" class="headerlink" title="静态私有变量"></a>静态私有变量</h2><p>通过一个匿名函数构造块级作用域，封装构造函数，并用原型编写特权方法。好处是特权方法在同一片内存中，坏处是所有实例共享私有变量（参见继承中的原型模式）。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  MyObject = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; <span class="comment">//构造函数</span></div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  MyObject.prototype.publicMethod = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    privateVariable++;</div><div class="line">    <span class="keyword">return</span> privateFunction();</div><div class="line">  &#125;;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<p>这里需要注意的是构造函数的写法。如果我们写成函数声明或加上var关键字的函数表达式形式，这个构造函数都会变成块级作用域中的私有函数。显然，这样是不对的，所以我们将其设置为一个匿名函数，这样这个构造函数就是全局变量，在块级作用域外部可以用它来创建实例。</p>
+<h2 id="模块模式（module-pattern）"><a href="#模块模式（module-pattern）" class="headerlink" title="模块模式（module pattern）"></a>模块模式（module pattern）</h2><p>这是一种为单例（singleton）创建私有变量的方法。单例就是只有一个实例的对象，通常通过字面量形式创建。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> singleton = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    publicProperty: <span class="literal">true</span>,</div><div class="line">    publicMethod: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">      privateVariable++;</div><div class="line">      <span class="keyword">return</span> privateFunction();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;();</div></pre></td></tr></table></figure></p>
+<p>这种创建方式的不足之处在于实例类型是object。如果需要规定一个实例类型，就要用到增强的模块模式。</p>
+<h2 id="增强的模块模式"><a href="#增强的模块模式" class="headerlink" title="增强的模块模式"></a>增强的模块模式</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> singleton = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> privateVariable = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> object = <span class="keyword">new</span> customType(); <span class="comment">//customType为想要继承的对象类型</span></div><div class="line"></div><div class="line">  object.publicProperty: <span class="literal">true</span>,</div><div class="line">  object.publicMethod: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">      privateVariable++;</div><div class="line">      <span class="keyword">return</span> privateFunction();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> object;</div><div class="line">&#125;();</div></pre></td></tr></table></figure>
+<p>和模块模式唯一的不同就是返回值是一个new出来的对象。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div style= "margin-bottom: 10px">如果您喜欢我，就帮我的主人买包旺旺仙贝吧O(∩_∩)O！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>买买买</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/weichat.jpg" alt="Hanfei Lin WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="Hanfei Lin Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i>  读到这里的都是真爱 ❤-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/闭包/" rel="tag"># 闭包</a>
+          
+            <a href="/tags/作用域/" rel="tag"># 作用域</a>
+          
+            <a href="/tags/this对象/" rel="tag"># this对象</a>
+          
+            <a href="/tags/函数/" rel="tag"># 函数</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/03/读书笔记-JS高级-9/" rel="next" title="作用域的相关概念和垃圾回收机制">
+                <i class="fa fa-chevron-left"></i> 作用域的相关概念和垃圾回收机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/07/读书笔记-JS高级-11/" rel="prev" title="BOM(浏览器对象模型)">
+                BOM(浏览器对象模型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Hanfei Lin" />
+          <p class="site-author-name" itemprop="name">Hanfei Lin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ForestCold" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://linkedin.com/in/hanfei-lin" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin-square"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/3232698014?topnav=1&wvr=6&topsug=1&is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#闭包"><span class="nav-number">1.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#this对象"><span class="nav-number">2.</span> <span class="nav-text">this对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包中的this问题"><span class="nav-number">2.1.</span> <span class="nav-text">闭包中的this问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用闭包构造私有变量"><span class="nav-number">3.</span> <span class="nav-text">利用闭包构造私有变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数中定义私有变量"><span class="nav-number">3.1.</span> <span class="nav-text">构造函数中定义私有变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态私有变量"><span class="nav-number">3.2.</span> <span class="nav-text">静态私有变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块模式（module-pattern）"><span class="nav-number">3.3.</span> <span class="nav-text">模块模式（module pattern）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增强的模块模式"><span class="nav-number">3.4.</span> <span class="nav-text">增强的模块模式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hanfei Lin</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2139993"></script>
+      <!-- UY END -->
+
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("PXcHUPmaGCHHAduS0ujzN7Pw-gzGzoHsz", "rkGKgaFFkY38Jw0pWlIGR9hv");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.1"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.1"></script>
+
+
+
+  <!--  -->
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
